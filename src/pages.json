@@ -5,6 +5,12 @@
 			"style": {
 				"navigationBarTitleText": "CQU321"
 			}
+		},
+		{
+			"path": "pages/grade/index",
+			"style": {
+				"navigationBarTitleText": "成绩查询"
+			}
 		}
 	],
 	"globalStyle": {
