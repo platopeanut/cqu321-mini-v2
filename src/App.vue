@@ -10,4 +10,8 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<style></style>
+<style>
+  @import "colorui/main.css";
+  @import "colorui/icon.css";
+  @import "App.css";
+</style>
