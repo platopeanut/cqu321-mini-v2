@@ -1,7 +1,5 @@
-import {StdNetworkError} from "./error/StdNetworkError";
-import stdToken, {TokenInfo} from "./StdToken";
-import stdUser, {UserInfo} from "./StdUser";
-import API from "./api";
+import stdToken, {type TokenInfo} from "@/core/StdToken";
+import stdUser, {type UserInfo} from "@/core/StdUser";
 
 const BASE_URL = 'https://api.321cqu.com/v1';
 
@@ -11,29 +9,20 @@ export type StdResponse<T> = {
   data: T
 };
 
-const stdCoreRequest = API.request;
-
 export async function stdRequest<ResType> (url: string, data: any = {}, needToken: boolean = true) {
   let header: any = {};
   if (needToken) {
     const tokenInfo = await handleToken();
     header["Authorization"] = "Bearer " + tokenInfo.token;
   }
-  const res = await stdCoreRequest<StdResponse<ResType>>({
+  const res = await uni.request({
     url: BASE_URL + url,
     method: "POST",
     header: header,
     data: data
   });
-  if (!StdNetworkError.test<ResType>(res.statusCode, res.data))
-    throw new StdNetworkError({
-      url: url,
-      statusCode: res.statusCode,
-      errMsg: res.errMsg,
-      requestParams: data,
-      responseData: res.data
-    });
-  return res.data.data;
+  const response = res.data as StdResponse<ResType>;
+  return response.data;
 }
 
 async function getToken(username: string, password: string) {
@@ -52,7 +41,6 @@ async function getToken(username: string, password: string) {
     },
     false
   );
-
   await stdToken.setRefreshTokenInfo({
     refreshToken: info.refreshToken,
     refreshTokenExpireTime: info.refreshTokenExpireTime
@@ -76,9 +64,9 @@ async function handleToken() {
   if (checkTokenExpireTime(stdToken.tokenInfo.tokenExpireTime))
     return stdToken.tokenInfo;
   // 如果refreshToken不存在或者过期，则先获取
-  if (!await stdToken.getRefreshTokenInfo() ||
-      !checkTokenExpireTime((await stdToken.getRefreshTokenInfo()).refreshTokenExpireTime)) {
-    // // 如果StuInfo信息缺失则抛出异常
+  const refreshToken = await stdToken.getRefreshTokenInfo()
+  if (!refreshToken || !checkTokenExpireTime(refreshToken.refreshTokenExpireTime)) {
+    // 如果StuInfo信息缺失则抛出异常
     // if (StdUserInfoError.test()) throw new StdUserInfoError();
     const info = await stdUser.getUserInfo();
     await getToken(info.auth, info.password);
@@ -97,7 +85,7 @@ export async function login(username: string, password: string) {
 }
 
 export async function bindOpenID() {
-  const res = await API.login()
+  const res = await uni.login();
   await stdRequest("/notification/bindOpenId", {
     "uid": (await stdUser.getUserInfo()).uid,
     "code": res.code

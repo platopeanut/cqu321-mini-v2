@@ -1,5 +1,5 @@
-import {StdError} from "./StdError";
-import {StdResponse} from "../network";
+import {StdError} from "@/core/error/StdError";
+import type {StdResponse} from "@/core/network";
 
 export class StdNetworkError<ResType> extends StdError {
 

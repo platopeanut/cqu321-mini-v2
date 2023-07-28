@@ -1,5 +1,5 @@
-import StdModel from "./StdModel";
-import {stdGetStorage, stdSetStorage} from "./storage";
+import type StdModel from "@/core/StdModel";
+import {stdGetStorage, stdSetStorage} from "@/core/storage";
 
 export type TokenInfo = {
   token: string

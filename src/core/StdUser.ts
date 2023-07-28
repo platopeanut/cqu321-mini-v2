@@ -1,6 +1,6 @@
-import {StdUserInfoError} from "./error/StdUserInfoError";
-import StdModel from "./StdModel";
-import {stdGetStorage, stdSetStorage} from "./storage";
+import type StdModel from "@/core/StdModel";
+import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {StdUserInfoError} from "@/core/error/StdUserInfoError";
 
 export type UserInfo = {
   uid: string       // 用户唯一id

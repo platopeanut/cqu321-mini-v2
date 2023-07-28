@@ -11,6 +11,12 @@
 			"style": {
 				"navigationBarTitleText": "成绩查询"
 			}
+		},
+		{
+			"path": "pages/curriculum/index",
+			"style": {
+				"navigationBarTitleText": "课程表"
+			}
 		}
 	],
 	"globalStyle": {
