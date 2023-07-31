@@ -39,6 +39,11 @@ export type GradeInfo = {
     scoreItems: ScoreItem[]
 }
 
+export enum GpaType {
+    FOUR,   // 四分制
+    FIVE    // 五分制
+}
+
 class GradeModel implements StdModel {
     private static STORAGE_KEY = "ScoreItems";
     private _gradeInfo: GradeInfo | null = null;

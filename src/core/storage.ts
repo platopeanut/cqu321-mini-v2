@@ -1,3 +1,6 @@
+import stdUser from "@/core/StdUser";
+import stdToken from "@/core/StdToken";
+
 export async function stdSetStorage(key: string, data: any) {
   console.log("[StdSetStorage] " + key);
   await uni.setStorage({ key, data });
@@ -22,4 +25,7 @@ export async function stdPrintStorageInfo() {
 export async function stdClearAllStorage() {
   console.log("[ClearAllStorage]");
   await uni.clearStorage();
+  // 清空内存中的数据
+  await stdUser.getUserInfo();
+  await stdToken.getRefreshTokenInfo();
 }
