@@ -34,8 +34,9 @@ class CourseModel implements StdModel {
       "/edu_admin_center/fetchCourseTimetable",
       { "code": sid, "offset": termOffset }
     );
-    // console.log(_courses);
+    console.log(_courses);
     await this.save(termOffset, {
+      termName: _courses.session_name,
       startDate: _courses.start_date,
       endDate: _courses.end_date,
       courses: _courses.timetables.map(it => convertCourses(it))
@@ -67,6 +68,7 @@ class CourseModel implements StdModel {
 export default CourseModel;
 
 export interface CoursesData {
+  termName: string
   startDate: string
   endDate: string
   courses: Course[]
@@ -91,6 +93,7 @@ interface _Courses {
   timetables: _Timetable[]
   start_date: string
   end_date: string
+  session_name: string
 }
 interface _Timetable {
   course: _Course

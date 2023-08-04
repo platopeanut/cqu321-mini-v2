@@ -27,8 +27,12 @@ export function calcDaysBetweenDates(date1: Date, date2: Date): number {
 }
 
 export function calcWeeksBetweenDates(date1: Date, date2: Date): number {
-    const differenceInDays = calcDaysBetweenDates(date1, date2);
-    return Math.trunc(differenceInDays / 7 + 1);
+    const days = calcDaysBetweenDates(date1, date2);
+    if (days >= 0 ) return Math.trunc(days / 7 + 1);
+    else {
+        if (days % 7 === 0) return Math.trunc(days / 7) + 1
+        else return Math.trunc(days / 7);
+    }
 }
 
 export function calcDateAfterNDays(date: Date, n: number): Date {
