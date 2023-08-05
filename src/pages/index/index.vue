@@ -12,8 +12,9 @@
         <Icon2nd title="志愿时长" icon-name="cuIcon-evaluate_fill" />
         <Icon2nd title="图书馆" icon-name="cuIcon-read" />
         <Icon2nd title="生活" icon-name="cuIcon-baby" />
-        <Icon2nd title="空教室" icon-name="cuIcon-location" />
+<!--        <Icon2nd title="空教室" icon-name="cuIcon-location" />-->
         <Icon2nd title="体测查询" icon-name="cuIcon-footprint" />
+        <Icon2nd title="设置" icon-name="cuIcon-settings" @click="navToSettingsPage"/>
       </view>
     </view>
   </view>
@@ -21,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import {stdClearAllStorage} from "@/core/storage";
 import Icon1st from "@/pages/index/Icon1st.vue";
 import Icon2nd from "@/pages/index/Icon2nd.vue";
 import CourseCard from "@/pages/index/CourseCard.vue";
@@ -31,13 +31,8 @@ function navToGradePage() {
 function navToCurriculumPage() {
   uni.navigateTo({url: "../curriculum/index"});
 }
-function clearCache() {
-  stdClearAllStorage().then(() => {
-    uni.showToast({
-      title: "CLEAR DONE!",
-      icon: "success"
-    });
-  });
+function navToSettingsPage() {
+  uni.navigateTo({url: "../settings/index"});
 }
 </script>
 
