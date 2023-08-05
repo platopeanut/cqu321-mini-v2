@@ -9,7 +9,9 @@ export type StdResponse<T> = {
   data: T
 };
 
-export async function stdRequest<ResType> (url: string, data: any = {}, needToken: boolean = true) {
+export type RequestMethod = 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
+
+export async function stdRequest<ResType> (url: string, data: any = {}, method: RequestMethod = "POST", needToken: boolean = true) {
   let header: any = {};
   if (needToken) {
     const tokenInfo = await handleToken();
@@ -17,7 +19,7 @@ export async function stdRequest<ResType> (url: string, data: any = {}, needToke
   }
   const res = await uni.request({
     url: BASE_URL + url,
-    method: "POST",
+    method: method,
     header: header,
     data: data
   });
@@ -39,6 +41,7 @@ async function getToken(username: string, password: string) {
       "username": username,
       "password": password
     },
+      "POST",
     false
   );
   await stdToken.setRefreshTokenInfo({
@@ -55,6 +58,7 @@ async function updateToken() {
   stdToken.tokenInfo = await stdRequest<TokenInfo>(
     "/authorization/refreshToken",
     {"refreshToken": (await stdToken.getRefreshTokenInfo()).refreshToken},
+    "POST",
     false
   );
 }

@@ -19,3 +19,13 @@ export function tryParseNumber(text: string): string | number {
     const num = Number(text);
     return isNaN(num) ? text : num;
 }
+
+export function arrayGroupBy<K, T>(array: T[], key: string) {
+    const map = new Map<K, T[]>();
+    array.forEach((it: any) => {
+        const li = map.get(it[key]) || [];
+        li.push(it);
+        map.set(it[key], li);
+    });
+    return map;
+}

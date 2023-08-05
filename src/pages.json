@@ -29,6 +29,12 @@
 			"style": {
 				"navigationBarTitleText": "用户信息"
 			}
+		},
+		{
+			"path": "pages/course_info/index",
+			"style": {
+				"navigationBarTitleText": "查课"
+			}
 		}
 	],
 	"globalStyle": {
