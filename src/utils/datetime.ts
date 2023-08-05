@@ -40,3 +40,9 @@ export function calcDateAfterNDays(date: Date, n: number): Date {
     newDate.setDate(date.getDate() + n);
     return newDate;
 }
+
+export function calcDayOfWeek(date: Date) {
+    let day = date.getDay();
+    if (day === 0) day = 7;
+    return day - 1;
+}

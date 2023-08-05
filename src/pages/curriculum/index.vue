@@ -1,5 +1,5 @@
 <template>
-  <Header :curr-date="currDate"/>
+  <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
   <CourseTable :table-items="tableItems" @on-tap-detail="onTapDetail"/>
   <Footer
     :week-of-term="weekOfTerm"
@@ -17,7 +17,7 @@
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import {getGridItemPosStyle, makeColorMap} from "@/pages/curriculum/util";
-  import {calcDateAfterNDays, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
+  import {calcDateAfterNDays, calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
   import Header from "@/pages/curriculum/Header.vue";
   import Footer from "@/pages/curriculum/Footer.vue";
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
@@ -34,6 +34,7 @@
   const courses = ref<Course[]>([]);
   const activeCourses = ref<Course[]>([]);
   // COMPUTED
+  const dayOfWeek = computed(() => calcDayOfWeek(currDate.value));
   const weekOfTerm = computed(() => calcWeeksBetweenDates(startDate.value, currDate.value));
   const currWeekCourses = computed(() => {
     return courses.value

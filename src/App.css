@@ -1,3 +1,19 @@
 .std-bg-primary {
     background-color: #f8f8f8;
 }
+
+.std-color-primary {
+    color: #fd6260;
+}
+
+.std-color-secondary {
+    color: #767676;
+}
+
+.std-box-shadow {
+    box-shadow: rgba(0, 0, 0, 0.1) 0 1rpx 3rpx 0, rgba(0, 0, 0, 0.06) 0 1rpx 2rpx 0;
+}
+
+.std-border-radius {
+    border-radius: 20rpx;
+}

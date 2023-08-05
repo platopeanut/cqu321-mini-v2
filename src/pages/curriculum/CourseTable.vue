@@ -4,7 +4,7 @@
       <view
           v-for="index in 13"
           :key="index"
-          class="flex justify-center align-center"
+          class="flex justify-center align-center std-color-secondary"
           style="height: 120rpx;">{{index}}</view>
     </view>
     <view class="table-root">

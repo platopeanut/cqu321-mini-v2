@@ -3,7 +3,7 @@
     <scroll-view scroll-x class="bg-white nav solid-bottom fixed" scroll-with-animation :scroll-left="scrollLeft">
       <view class="flex text-center">
         <view class="cu-item flex-sub text-lg"
-              :class="index===tabCur?'text-blue text-bold cur':''"
+              :class="index === tabCur ? 'std-color-primary text-bold cur' : 'std-color-secondary'"
               v-for="(item,index) in termNames"
               :key="index"
               @tap="onTabSelect"
@@ -16,11 +16,11 @@
         <view class="text-black text-left text-lg">当前学期</view>
         <view class="flex text-center padding-top">
           <view class="flex-sub">
-            <view class="text-xxl text-blue">{{termAvgGpa.four}}</view>
+            <view class="text-xxl std-color-primary">{{termAvgGpa.four}}</view>
             <view class="text-lg text-grey">四分制</view>
           </view>
           <view class="flex-sub">
-            <view class="text-xxl text-blue">{{termAvgGpa.five}}</view>
+            <view class="text-xxl std-color-primary">{{termAvgGpa.five}}</view>
             <view class="text-lg text-grey">五分制</view>
           </view>
         </view>
