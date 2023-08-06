@@ -11,6 +11,7 @@
     </view>
     <view v-else>
       <Overview v-if="gpaInfo !== null" :gpa-info="gpaInfo" />
+      <Empty v-else icon-type="warning" message="请尝试更新数据" />
       <view @click="updateGradeInfo" class="cu-btn block round lg" :class="isLoading ? 'bg-green' : 'bg-blue'"  style="width: max-content; margin: 0 auto;">
         <text v-if="isLoading" class="cuIcon-loading1 text-bold cuIconfont-spin margin-right"></text>
         <view>{{isLoading ? '更新中...' : '更新'}}</view>
@@ -33,6 +34,7 @@
 import Overview from "@/pages/grade/Overview.vue";
 import TermOverview from "@/pages/grade/TermOverview.vue";
 import GradeItem from "@/pages/grade/GradeItem.vue";
+  import Empty from "@/pages/components/Empty.vue";
 
   const gradeModel = new GradeModel();
 

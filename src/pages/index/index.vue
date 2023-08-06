@@ -6,7 +6,7 @@
         <Icon1st title="课表" icon-name="cuIcon-calendar" @click="navToCurriculumPage"/>
         <Icon1st title="成绩" icon-name="cuIcon-rank" @click="navToGradePage"/>
         <Icon1st title="查课" icon-name="cuIcon-search" @click="navToCourseInfoPage"/>
-        <Icon1st title="排考" icon-name="cuIcon-write"/>
+        <Icon1st title="排考" icon-name="cuIcon-write" @click="navToExamPage"/>
       </view>
       <view class="icons-1st padding-top">
         <Icon2nd title="志愿时长" icon-name="cuIcon-evaluate_fill" />
@@ -36,6 +36,9 @@
   }
   function navToCourseInfoPage() {
     uni.navigateTo({url: "../course_info/index"});
+  }
+  function navToExamPage() {
+    uni.navigateTo({url: "../exam/index"});
   }
 </script>
 
