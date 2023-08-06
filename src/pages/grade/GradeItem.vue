@@ -1,6 +1,6 @@
 <template>
   <view class="cu-list menu card-menu margin-top">
-    <view class="cu-item" @click="$emit('click')">
+    <view class="cu-item" @click="isExpand = !isExpand">
       <view class="content" style="max-width: 60%">
         <view class="text-lg text-bold">{{scoreItem.name}}</view>
       </view>
@@ -32,9 +32,7 @@
 <script setup lang="ts">
   import type {ScoreItem} from "@/models/GradeModel";
   import {scoreToColor, scoreToNumber} from "@/pages/grade/util";
-  defineProps<{
-    scoreItem: ScoreItem
-    isExpand: boolean
-  }>();
-  defineEmits<{ (e: 'click'): void }>();
+  import {ref} from "vue";
+  defineProps<{ scoreItem: ScoreItem }>();
+  const isExpand = ref(false);
 </script>

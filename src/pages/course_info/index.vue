@@ -17,21 +17,27 @@
       </view>
     </view>
     <view v-if="searchType === SearchType.CourseName">
-      <CourseItem
-          v-for="(courseAbstract, index) in dataByCourseName"
-          :key="index"
-          :course-abstract="courseAbstract"
-          @click="onTapDetail"
-      />
+      <view v-if="dataByCourseName.length > 0">
+        <CourseItem
+            v-for="(courseAbstract, index) in dataByCourseName"
+            :key="index"
+            :course-abstract="courseAbstract"
+            @click="onTapDetail"
+        />
+      </view>
+      <Tip v-else/>
     </view>
     <view v-else>
-      <TeacherCourse
-        v-for="([teacherName, courseAbstractList], index) in dataByTeacherName"
-        :teacher-name="teacherName"
-        :course-abstract-list="courseAbstractList"
-        :key="index"
-        @click="onTapDetail"
-      />
+      <view v-if="dataByTeacherName.length > 0">
+        <TeacherCourse
+            v-for="([teacherName, courseAbstractList], index) in dataByTeacherName"
+            :teacher-name="teacherName"
+            :course-abstract-list="courseAbstractList"
+            :key="index"
+            @click="onTapDetail"
+        />
+      </view>
+      <Tip v-else/>
     </view>
   </view>
 </template>
@@ -43,18 +49,15 @@
   import CourseItem from "@/pages/course_info/CourseItem.vue";
   import {arrayGroupBy} from "@/utils/util";
   import TeacherCourse from "@/pages/course_info/TeacherCourse.vue";
-
-  const courseInfoModel = new CourseInfoModel();
-
+  import Tip from "@/pages/course_info/Tip.vue";
   const searchType = ref(SearchType.CourseName);
   const dataByCourseName = ref<CourseAbstract[]>([]);
   const dataByTeacherName = ref<[string, CourseAbstract[]][]>([]);
-
   const queryInfo = ref("");
   async function onTapQuery() {
     if (queryInfo.value.length > 0) {
       await uni.showLoading({ title: "查询中" });
-      const data = await courseInfoModel.query(searchType.value, queryInfo.value);
+      const data = await CourseInfoModel.query(searchType.value, queryInfo.value);
       uni.hideLoading();
       if (searchType.value === SearchType.CourseName) {
         dataByCourseName.value = data;
@@ -70,12 +73,7 @@
       });
     }
   }
-
-  function onTapDetail(code: string) {
-    console.log(code);
+  async function onTapDetail(courseAbstract: CourseAbstract) {
+    await uni.navigateTo({ url: `./detail/index?name=${courseAbstract.name}&code=${courseAbstract.code}` });
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,6 +1,6 @@
 <template>
   <view class="cu-list menu card-menu margin-top">
-    <view class="cu-item arrow" @click="$emit('click', courseAbstract.code)">
+    <view class="cu-item arrow" @click="$emit('click', courseAbstract)">
       <view class="content">
         <view class="text-lg text-black">{{courseAbstract.name}}</view>
       </view>
@@ -14,5 +14,5 @@
 <script setup lang="ts">
   import type {CourseAbstract} from "@/models/CourseInfoModel";
   defineProps<{ courseAbstract: CourseAbstract }>();
-  defineEmits<{ (e: 'click', code: string):void }>();
+  defineEmits<{ (e: 'click', courseAbstract: CourseAbstract):void }>();
 </script>

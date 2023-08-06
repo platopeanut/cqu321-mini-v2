@@ -13,7 +13,7 @@
       v-for="(courseAbstract, index) in courseAbstractList"
       :key="index"
       class="cu-item arrow"
-      @click="$emit('click', courseAbstract.code)"
+      @click="$emit('click', courseAbstract)"
     >
       <view class="content">
         <view class="text-lg text-black">{{courseAbstract.name}}</view>
@@ -32,6 +32,6 @@
     teacherName: string
     courseAbstractList: CourseAbstract[]
   }>();
-  defineEmits<{ (e: 'click', code: string):void }>();
+  defineEmits<{ (e: 'click', courseAbstract: CourseAbstract):void }>();
   const isExpand = ref(false);
 </script>

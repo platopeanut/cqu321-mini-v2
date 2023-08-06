@@ -1,5 +1,5 @@
 <template>
-  <Header :term-names="termNames" :tab-cur="tabCur" @on-tab-select="onTabSelect"/>
+  <Header :term-names="termNames" :tab-cur="tabCur" @on-tab-select="(newTabCur) => {tabCur = newTabCur}"/>
   <view class="std-bg-primary padding" style="margin-top: 90rpx;">
     <view v-if="tabCur !== 0">
       <TermOverview :term-avg-gpa="termAvgGpa"/>
@@ -7,8 +7,6 @@
         v-for="(item, index) in scoreItems"
         :key="index"
         :score-item="item"
-        :is-expand="selectItems[index]"
-        @click="() => { selectItems[index] = !selectItems[index]; }"
       />
     </view>
     <view v-else>
@@ -22,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import GradeModel, {GpaType, GradeInfo} from "@/models/GradeModel";
+  import GradeModel, {GpaType, GradeInfo} from "@/models/GradeModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import {
@@ -41,8 +39,6 @@ import GradeItem from "@/pages/grade/GradeItem.vue";
   const tabCur = ref(0);
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
-  // 点开的成绩项
-  const selectItems = ref<boolean[]>([]);
   const isLoading = ref(false);
 
   onShow(async () => {
@@ -81,12 +77,6 @@ import GradeItem from "@/pages/grade/GradeItem.vue";
   // 总览信息
   const gpaInfo = computed(() => gradeInfo.value?.gpaInfo || null);
 
-  // 切换标签页时触发的回调
-  function onTabSelect(newTabCur: number) {
-    tabCur.value = newTabCur;
-    selectItems.value = new Array(scoreItems.value?.length || 0).fill(false);
-  }
-
   // 更新成绩
   async function updateGradeInfo() {
     isLoading.value = true;
@@ -99,6 +89,3 @@ import GradeItem from "@/pages/grade/GradeItem.vue";
     });
   }
 </script>
-
-<style scoped>
-</style>
