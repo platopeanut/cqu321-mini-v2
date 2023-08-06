@@ -63,7 +63,7 @@ class CourseInfoModel implements StdModel {
                                 item.level3_num,
                                 item.level4_num,
                                 item.level5_num
-                            ]
+                            ].reverse()
                         };
                     })
                 };
