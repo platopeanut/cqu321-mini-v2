@@ -4,8 +4,8 @@
     <view v-if="tabCur !== 0">
       <TermOverview :term-avg-gpa="termAvgGpa"/>
       <GradeItem
-        v-for="(item, index) in scoreItems"
-        :key="index"
+        v-for="item in scoreItems"
+        :key="item.moreInfo.code"
         :score-item="item"
       />
     </view>
