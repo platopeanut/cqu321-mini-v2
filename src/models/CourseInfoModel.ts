@@ -50,11 +50,6 @@ class CourseInfoModel implements StdModel {
                 return {
                     teacherName: it.teacher_name,
                     details: it.details.map(item => {
-                        const allNum = item.level1_num
-                            + item.level2_num
-                            + item.level3_num
-                            + item.level4_num
-                            + item.level5_num;
                         return {
                             termName: `${item.term.year}${item.term.is_autumn ? '秋' : '春'}`,
                             isHierarchy: item.is_hierarchy,
@@ -63,11 +58,11 @@ class CourseInfoModel implements StdModel {
                             min: item.min,
                             average: item.average,
                             levels: [
-                                item.level1_num / allNum,
-                                item.level2_num / allNum,
-                                item.level3_num / allNum,
-                                item.level4_num / allNum,
-                                item.level5_num / allNum
+                                item.level1_num,
+                                item.level2_num,
+                                item.level3_num,
+                                item.level4_num,
+                                item.level5_num
                             ]
                         };
                     })

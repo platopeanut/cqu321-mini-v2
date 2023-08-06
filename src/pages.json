@@ -41,6 +41,12 @@
 			"style": {
 				"navigationBarTitleText": "课程详情"
 			}
+		},
+		{
+			"path": "pages/exam/index",
+			"style": {
+				"navigationBarTitleText": "考试安排"
+			}
 		}
 	],
 	"globalStyle": {

@@ -5,7 +5,3 @@ export const ScoreLevels = [
     ['cyan', '[80, 90)'],
     ['blue', '[90, 100]']
 ];
-
-export function ratioDisplay(ratio: number) {
-    return '' + Math.round(ratio * 100);
-}

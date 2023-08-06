@@ -18,10 +18,10 @@
         <view class="cu-progress radius active">
           <view
               v-for="(num, idx) in item.levels"
-              :style="{width: num * 100 + '%'}"
+              :style="{width: num / item.num * 100 + '%'}"
               :class="`bg-${ScoreLevels[idx][0]}`"
               :key="idx">
-            <view v-if="num > 0">{{ratioDisplay(num)}}</view>
+            <view v-if="num > 0">{{num}}</view>
           </view>
         </view>
       </view>
@@ -32,7 +32,7 @@
 <script setup lang="ts">
   import {ref} from "vue";
   import type {Detail} from "@/models/CourseInfoModel";
-  import {ratioDisplay, ScoreLevels} from "@/pages/course_info/detail/util";
+  import {ScoreLevels} from "@/pages/course_info/detail/util";
   defineProps<{ detail: Detail }>();
   const isExpand = ref(false);
 </script>
