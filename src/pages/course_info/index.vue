@@ -13,7 +13,7 @@
         </view>
       </view>
       <view class="padding-top padding-bottom" style="display: flex; justify-content: center;">
-        <button class="cu-btn bg-green lg" @click="onTapQuery" style="width: 50%;">查询</button>
+        <button class="cu-btn btn lg" @click="onTapQuery" style="width: 50%;">查询</button>
       </view>
     </view>
     <view v-if="searchType === SearchType.CourseName">
@@ -77,3 +77,11 @@
     await uni.navigateTo({ url: `./detail/index?name=${courseAbstract.name}&code=${courseAbstract.code}` });
   }
 </script>
+
+<style scoped>
+  .btn {
+    background-color: #fd6260;
+    color: white;
+    font-weight: bold;
+  }
+</style>
