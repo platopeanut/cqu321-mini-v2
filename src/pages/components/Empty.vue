@@ -1,7 +1,8 @@
 <template>
-  <view class="text-center margin padding">
+  <view class="text-center padding bg-white">
     <view class="icon" :class="getClass(iconType)"></view>
     <view class="text-xl text-grey">{{message}}</view>
+    <view v-if="hint" class="padding-xs text-df text-blue text-shadow">{{hint}}</view>
   </view>
 </template>
 
@@ -15,6 +16,7 @@
   defineProps<{
     message: string
     iconType: "success" | "warning" | "error"
+    hint?: string
   }>();
   function getClass(iconType: "success" | "warning" | "error") {
     if (iconType === "success") return "cuIcon-roundcheckfill text-green";
