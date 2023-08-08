@@ -28,6 +28,7 @@ class StdUser implements StdModel {
     this._userInfo = info;
     await stdSetStorage("UserInfo", info);
   }
+  public clear() { this._userInfo = null; }
 }
 
 export default new StdUser();

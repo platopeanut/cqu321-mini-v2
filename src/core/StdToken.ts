@@ -20,6 +20,7 @@ class StdToken implements StdModel {
   }
   public async getRefreshTokenInfo() { return await stdGetStorage<RefreshTokenInfo>("RefreshTokenInfo"); }
   public async setRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("RefreshTokenInfo", info); }
+  public clear() { this._tokenInfo = {token: "", tokenExpireTime: -1}; }
 }
 
 export default new StdToken();

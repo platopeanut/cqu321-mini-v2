@@ -26,6 +26,6 @@ export async function stdClearAllStorage() {
   console.log("[ClearAllStorage]");
   await uni.clearStorage();
   // 清空内存中的数据
-  await stdUser.getUserInfo();
-  await stdToken.getRefreshTokenInfo();
+  await stdUser.clear();
+  await stdToken.clear();
 }

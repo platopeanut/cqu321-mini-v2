@@ -38,7 +38,7 @@
   function clearCache() {
     stdClearAllStorage().then(() => {
       uni.showToast({
-        title: "CLEAR DONE!",
+        title: "已清除",
         icon: "success"
       });
     });
