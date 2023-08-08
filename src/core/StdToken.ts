@@ -1,5 +1,7 @@
 import type StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {StdRefreshTokenError} from "@/core/error/StdRefreshTokenError";
+import {userInfoLackCallback} from "@/utils/callback";
 
 export type TokenInfo = {
   token: string
@@ -18,7 +20,14 @@ class StdToken implements StdModel {
     this._tokenInfo = info;
     // console.log("TokenInfo", this._tokenInfo);
   }
-  public async getRefreshTokenInfo() { return await stdGetStorage<RefreshTokenInfo>("RefreshTokenInfo"); }
+  public async getRefreshTokenInfo() {
+    try {
+      return await stdGetStorage<RefreshTokenInfo>("RefreshTokenInfo");
+    } catch (e) {
+      await userInfoLackCallback();
+      throw new StdRefreshTokenError(e);
+    }
+  }
   public async setRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("RefreshTokenInfo", info); }
   public clear() { this._tokenInfo = {token: "", tokenExpireTime: -1}; }
 }
