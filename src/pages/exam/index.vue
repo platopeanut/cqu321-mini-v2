@@ -5,12 +5,13 @@
       @on-tap-update="onTapUpdate"
   />
   <view class="std-bg-primary padding-top padding-bottom-xl" style="margin-top: 80rpx;">
-    <Empty v-if="examInfoList.length === 0" message="暂无考试安排" icon-type="warning"/>
+    <Empty v-if="currExamInfoList.length === 0" message="暂无考试安排" icon-type="success" hint="请尝试刷新"/>
     <ExamItem
         v-for="examInfo in currExamInfoList"
         :key="examInfo.code"
         :exam-info="examInfo"
         :days="calcDays(examInfo)"
+        :is-over="tabCur !== 0"
     />
   </view>
 </template>
@@ -46,24 +47,6 @@
 
   onShow(async () => {
     examInfoList.value = await examModel.get();
-    examInfoList.value.push({
-      name: "高等数学",
-      classroom: "D1234",
-      code: "MATH1234",
-      date: "2023-08-08",
-      startTime: "08:00",
-      endTime: "10:00",
-      seatNum: "12",
-    });
-    examInfoList.value.push({
-      name: "大学物理",
-      classroom: "D1234",
-      code: "PHY1234",
-      date: "2023-08-09",
-      startTime: "08:00",
-      endTime: "10:00",
-      seatNum: "12",
-    });
     currDate.value = new Date();
   });
   async function onTapUpdate() {
@@ -71,6 +54,7 @@
     await examModel.update();
     examInfoList.value = await examModel.get();
     uni.hideLoading();
+    await uni.showToast({ title: "更新完成", icon: "success" });
   }
   function calcDays(examInfo: ExamInfo) {
     const examDate = stringToDateInChinaTime(examInfo.date);
