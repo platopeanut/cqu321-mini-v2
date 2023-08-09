@@ -34,6 +34,7 @@ class CourseModel implements StdModel {
       "/edu_admin_center/fetchCourseTimetable",
       { "code": sid, "offset": termOffset }
     );
+    console.log({ "code": sid, "offset": termOffset })
     console.log(_courses);
     await this.save(termOffset, {
       termName: _courses.session_name,

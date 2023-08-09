@@ -1,6 +1,13 @@
 import type {Course} from "@/models/CourseModel";
 import {calcDateAfterNDays} from "@/utils/datetime";
 
+export type CourseCell = {
+    course: Course
+    pos: GridItemPosStyle
+    bgColor: string
+    isOverlap: boolean
+}
+
 export type GridItemPosStyle = {
     gridColumnStart: number
     gridColumnEnd: number
@@ -65,4 +72,73 @@ export function getWeekDates(date: Date) {
         dateList.push(calcDateAfterNDays(date, i).getDate());
     }
     return dateList;
+}
+
+export function makeCoursesMatrix(courses: Course[]) {
+    // 初始化 7 * 13 矩阵，每个元素是一个Course[]
+    const matrix = new Array<Course[][]>();
+    for (let i = 0; i < 7; i++) {
+        const li: Course[][] = [];
+        for (let j = 0; j < 13; j++) {
+            li.push(new Array<Course>());
+        }
+        matrix.push(li);
+    }
+    // 填充
+    courses.forEach(it => {
+        for (let i = it.dayTime.period.start - 1; i < it.dayTime.period.end; i++) {
+            matrix[it.dayTime.weekday][i].push(it);
+        }
+    });
+    return matrix;
+}
+
+export function getCourseCells(coursesMatrix: Course[][][]) {
+    const courseCells: CourseCell[] = [];
+    for (let i = 0; i < 7; i++) {
+        const dayCourses = coursesMatrix[i];
+        let courseCell: CourseCell | null = null;
+        for (let j = 0; j < dayCourses.length; j++) {
+            const courses = dayCourses[j];
+            if (courses.length > 0) {
+                const isOverlap = courses.length > 1;
+                if (courseCell === null) {
+                    courseCell = {
+                        bgColor: "",
+                        course: courses[0],
+                        isOverlap: isOverlap,
+                        pos: {
+                            gridColumnStart: i,
+                            gridColumnEnd: i + 1,
+                            gridRowStart: j + 1,
+                            gridRowEnd: j + 2
+                        }
+                    } as CourseCell;
+                }
+                else {
+                    if (courseCell.course.code === courses[0].code) {
+                        if (isOverlap) courseCell.isOverlap = isOverlap;
+                        courseCell.pos.gridRowEnd ++;
+                    }
+                    // submit
+                    else {
+                        courseCells.push(courseCell);
+                        courseCell = null;
+                        j --;
+                    }
+                }
+                // submit
+                if (courseCell !== null && j === dayCourses.length - 1) {
+                    courseCells.push(courseCell);
+                    courseCell = null;
+                }
+            }
+            // submit
+            else if (courseCell !== null) {
+                courseCells.push(courseCell);
+                courseCell = null;
+            }
+        }
+    }
+    return courseCells;
 }

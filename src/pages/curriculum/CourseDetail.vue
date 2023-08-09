@@ -2,7 +2,7 @@
   <view
     class="cu-modal"
     :class="isShow ? 'show' : ''"
-    @tap="isShow = false"
+    @tap="$emit('click')"
   >
     <view class="cu-dialog" @tap.stop="">
       <swiper
@@ -128,13 +128,6 @@
 
 <script setup lang="ts">
   import {Course} from "@/models/CourseModel";
-  import {ref, watch} from "vue";
-
-  const props = defineProps<{
-    courses: Course[]
-  }>();
-  const isShow = ref(false);
-  watch(props.courses, () => {
-    isShow.value = true;
-  });
+  defineProps<{ courses: Course[], isShow: boolean }>();
+  defineEmits<{ (e: 'click'): void }>();
 </script>

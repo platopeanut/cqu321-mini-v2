@@ -10,11 +10,13 @@
     <view class="table-root">
       <view
           class="table-item text-df"
-          :style="{...tableItem.pos, backgroundColor: tableItem.bgColor, width: '100rpx'}"
+          style="width: 100rpx;"
+          :style="{...tableItem.pos, backgroundColor: tableItem.bgColor}"
           v-for="(tableItem, index) in tableItems"
           :key="index"
           @click="$emit('onTapDetail', tableItem.course)"
       >
+        <view v-if="tableItem.isOverlap" class="text-white">...</view>
         <view>{{tableItem.course.classroom}}</view>
         <view class="bg-white" style="height: 1rpx;"></view>
         <view>{{tableItem.course.name}}</view>
@@ -25,18 +27,10 @@
 
 <script setup lang="ts">
   import type {Course} from "@/models/CourseModel";
-  import type {GridItemPosStyle} from "@/pages/curriculum/util";
+  import type {CourseCell} from "@/pages/curriculum/util";
 
-  defineProps<{
-    tableItems: {
-      course: Course,
-      pos: GridItemPosStyle,
-      bgColor: String
-    }[]
-  }>();
-  defineEmits<{
-    (e: 'onTapDetail', course: Course) : void
-  }>();
+  defineProps<{ tableItems: CourseCell[] }>();
+  defineEmits<{ (e: 'onTapDetail', course: Course) : void }>();
 
 </script>
 
@@ -44,7 +38,7 @@
   .table-root {
     width: 700rpx;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 100rpx);
     grid-template-rows: repeat(13, 120rpx);
   }
 
