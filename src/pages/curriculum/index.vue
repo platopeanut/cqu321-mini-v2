@@ -17,21 +17,17 @@
 </template>
 
 <script setup lang="ts">
-  import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
-  import {onShow} from "@dcloudio/uni-app";
-  import {computed, ref} from "vue";
-  import {
-    getCourseCells,
-    makeColorMap,
-    makeCoursesMatrix
-  } from "@/pages/curriculum/util";
-  import {calcDateAfterNDays, calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
-  import Header from "@/pages/curriculum/Header.vue";
-  import Footer from "@/pages/curriculum/Footer.vue";
-  import CourseTable from "@/pages/curriculum/CourseTable.vue";
-  import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
+import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
+import {onShow} from "@dcloudio/uni-app";
+import {computed, ref} from "vue";
+import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
+import {calcDateAfterNDays, calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
+import Header from "@/pages/curriculum/Header.vue";
+import Footer from "@/pages/curriculum/Footer.vue";
+import CourseTable from "@/pages/curriculum/CourseTable.vue";
+import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
 
-  const courseModel = new CourseModel();
+const courseModel = new CourseModel();
   // CONST
   let colorMap: Map<string, string>;
   // STATUS
@@ -116,13 +112,20 @@
     });
   }
   function onTapSwitchTerm() {
-    const itemList = [termName.value, '2023秋'];
-    itemList[termOffset.value] += '（当前）';
+    const termNames = courseModel.getTermNames();
+    const itemList = [
+      termNames.curr || "【当前学期】点击更新",
+      termNames.next || "【下一学期】点击更新"
+    ];
+    itemList[termOffset.value] += '🍉';
     uni.showActionSheet({
       itemList: itemList,
       success(result: UniNamespace.ShowActionSheetRes): void {
         termOffset.value = result.tapIndex;
         initData();
+        if ((termOffset.value === TermOffset.CurrTerm ? termNames.curr : termNames.next) === null) {
+          updateCourseInfo();
+        }
       }
     });
   }

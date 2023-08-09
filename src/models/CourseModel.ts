@@ -28,6 +28,13 @@ class CourseModel implements StdModel {
     else return null;
   }
 
+  public getTermNames() {
+    return {
+      curr: this._coursesInfo?.currTerm?.termName || null,
+      next: this._coursesInfo?.nextTerm?.termName || null
+    }
+  }
+
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
     const sid = (await stdUser.getUserInfo()).sid;
     const _courses = await stdRequest<_Courses>(
