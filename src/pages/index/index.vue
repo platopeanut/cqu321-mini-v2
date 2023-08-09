@@ -9,7 +9,7 @@
         <Icon1st title="排考" icon-name="cuIcon-write" @click="navToExamPage"/>
       </view>
       <view class="icons-1st padding-top">
-        <Icon2nd title="志愿时长" icon-name="cuIcon-evaluate_fill" />
+        <Icon2nd title="常用信息" icon-name="cuIcon-evaluate_fill" @click="navToGeneralInfoPage" />
         <Icon2nd title="图书馆" icon-name="cuIcon-read" />
         <Icon2nd title="生活" icon-name="cuIcon-baby" />
 <!--        <Icon2nd title="空教室" icon-name="cuIcon-location" />-->
@@ -39,6 +39,9 @@
   }
   function navToExamPage() {
     uni.navigateTo({url: "../exam/index"});
+  }
+  function navToGeneralInfoPage() {
+    uni.navigateTo({url: "../general_info/index"});
   }
 </script>
 
