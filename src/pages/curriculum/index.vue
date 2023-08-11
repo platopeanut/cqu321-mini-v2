@@ -59,7 +59,7 @@ const courseModel = new CourseModel();
     //   } as CourseCell;
     // });
     return getCourseCells(coursesMatrix.value).map(it => {
-      it.bgColor = colorMap.get(it.course.courseNum) || 'gray';
+      it.bgColor = colorMap.get(it.course.code) || 'gray';
       return it;
     });
   });
@@ -95,7 +95,6 @@ const courseModel = new CourseModel();
   function onTapPrevWeek() { switchWeek(-1); }
   function switchWeek(deltaWeek: number) {
     currDate.value = calcDateAfterNDays(currDate.value, deltaWeek * 7);
-    console.log(tableItems.value);
   }
 
   function onTapMoreFunc() {
@@ -143,6 +142,5 @@ const courseModel = new CourseModel();
     }
     activeCourses.value = targetCourses;
     isShowDetail.value = true;
-    console.log(activeCourses.value);
   }
 </script>

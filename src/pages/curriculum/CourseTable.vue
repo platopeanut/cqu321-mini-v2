@@ -16,7 +16,7 @@
           :key="index"
           @click="$emit('onTapDetail', tableItem.course)"
       >
-        <view v-if="tableItem.isOverlap" class="text-white">...</view>
+        <view v-if="tableItem.isOverlap" class="text-white text-bold text-right padding-top-xs padding-right-xs">...</view>
         <view>{{tableItem.course.classroom}}</view>
         <view class="bg-white" style="height: 1rpx;"></view>
         <view>{{tableItem.course.name}}</view>

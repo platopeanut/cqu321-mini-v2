@@ -15,15 +15,6 @@ export type GridItemPosStyle = {
     gridRowEnd: number
 }
 
-export function getGridItemPosStyle(course: Course) {
-    return {
-        gridColumnStart: course.dayTime.weekday + 1,
-        gridColumnEnd: course.dayTime.weekday + 2,
-        gridRowStart: course.dayTime.period.start,
-        gridRowEnd: course.dayTime.period.end + 1,
-    } as GridItemPosStyle;
-}
-
 const COLORS = [
     '#ff9b6a',
     '#addc81',
@@ -49,13 +40,30 @@ const COLORS = [
     '#fecb62',
 ];
 
+const TIME_TABLE = [
+    '08:30~09:15',
+    '09:25~10:10',
+    '10:30~11:15',
+    '11:25~12:10',
+    '13:30~14:15',
+    '14:25~15:10',
+    '15:20~16:05',
+    '16:25~17:10',
+    '17:20~18:05',
+    '19:00~19:45',
+    '19:55~20:40',
+    '20:50~21:35',
+    '21:45~22:30',
+];
+
 export function makeColorMap(courses: Course[]) {
-    const courseNumsSet = new Set<string>();
-    courses.forEach(it => courseNumsSet.add(it.courseNum));
-    const courseNums = Array.from(courseNumsSet);
+    const codeSet = new Set<string>();
+    // 根据课程编号区分颜色（使同一课程的教学课与实验课颜色相同）
+    courses.forEach(it => codeSet.add(it.code));
+    const codes = Array.from(codeSet);
     const colorMap = new Map<string, string>();
-    for (let i = 0; i < courseNums.length; i++) {
-        colorMap.set(courseNums[i], COLORS[i % COLORS.length]);
+    for (let i = 0; i < codes.length; i++) {
+        colorMap.set(codes[i], COLORS[i % COLORS.length]);
     }
     return colorMap;
 }
@@ -116,7 +124,8 @@ export function getCourseCells(coursesMatrix: Course[][][]) {
                     } as CourseCell;
                 }
                 else {
-                    if (courseCell.course.code === courses[0].code) {
+                    // 按照教学班号区分（区分同一课程的教学课与实验课）
+                    if (courseCell.course.courseNum === courses[0].courseNum) {
                         if (isOverlap) courseCell.isOverlap = isOverlap;
                         courseCell.pos.gridRowEnd ++;
                     }
@@ -141,4 +150,38 @@ export function getCourseCells(coursesMatrix: Course[][][]) {
         }
     }
     return courseCells;
+}
+
+export function getPeriodText(course: Course) {
+    const week = '一二三四五六日'.split('')[course.dayTime.weekday]
+    return `周${week} ${course.dayTime.period.start}-${course.dayTime.period.end}节`;
+}
+
+export function getWeeksText(course: Course) {
+    const weeks: number[][] = [[course.weeks[0]]];
+    for (let i = 1; i < course.weeks.length; i++) {
+        if (course.weeks[i] === course.weeks[i - 1] + 1) {
+            weeks[weeks.length - 1].push(course.weeks[i]);
+        }
+        else { weeks.push([course.weeks[i]]); }
+    }
+    let text = '';
+    for (let i = 0; i < weeks.length; i++) {
+        if (weeks[i].length === 1) {
+            text += `${weeks[i][0]}`;
+        }
+        else {
+            text += `${weeks[i][0]}-${weeks[i][weeks[i].length - 1]}`;
+        }
+        if (i < weeks.length - 1) text += ', ';
+    }
+    return text;
+}
+
+export function getTimeText(course: Course) {
+    const time1 = TIME_TABLE[course.dayTime.period.start - 1];
+    const time2 = TIME_TABLE[course.dayTime.period.end - 1];
+    const start = time1.split('~')[0];
+    const end = time2.split('~')[1];
+    return start + ' ~ ' + end;
 }

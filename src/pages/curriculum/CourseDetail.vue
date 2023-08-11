@@ -9,117 +9,48 @@
         class="square-dot"
         indicator-dots
         circular
-        indicator-color="#8799a3"
-        indicator-active-color="#0081ff"
-        style="height: 800rpx;"
+        indicator-color="#767676"
+        indicator-active-color="#fd6260"
+        style="height: 730rpx;"
       >
-        <swiper-item v-for="(course, index) in courses" :key="index">
+        <swiper-item class="bg-white" v-for="(course, index) in courses" :key="index">
           <scroll-view scroll-y>
-            <view class="cu-list menu text-left solid-top">
-              <view class="cu-item" style="text-align: center;">
-                <view class="content">
-                  <text class="text-black">{{course.name}}</text>
-                </view>
+            <view class="margin padding text-lg text-black">
+              <view class="text-center text-bold">{{course.name}}</view>
+              <view class="flex justify-between margin-top">
+                <view>课程编号</view>
+                <view>{{course.code}}</view>
               </view>
-<!--              <view class="cu-item">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-grey">上课时段</text>-->
-<!--                </view>-->
-<!--                <view class="action">-->
-<!--                  <text class="text-black">周{{course.weeks}}节</text>-->
-<!--                </view>-->
-<!--              </view>-->
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">上课教室</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.classroom}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>教学班号</view>
+                <view>{{course.courseNum}}</view>
               </view>
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">课程编号</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.code}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>课程学分</view>
+                <view>{{course.credit}}</view>
               </view>
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">任课教师</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.instructor}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>上课教室</view>
+                <view>{{course.classroom}}</view>
               </view>
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">教学班号</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.courseNum}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>任课教师</view>
+                <view>{{course.instructor}}</view>
               </view>
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">上课周次</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.weeks.join(',')}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>上课周数</view>
+                <view>{{getWeeksText(course)}}</view>
               </view>
-              <view class="cu-item">
-                <view class="content">
-                  <text class="text-grey">上课时间</text>
-                </view>
-                <view class="action">
-                  <text class="text-black">{{course.dayTime.weekday}}</text>
-                </view>
+              <view class="flex justify-between margin-top">
+                <view>上课时段</view>
+                <view>{{getPeriodText(course)}}</view>
+              </view>
+              <view class="flex justify-between margin-top">
+                <view>上课时间</view>
+                <view>{{getTimeText(course)}}</view>
               </view>
             </view>
           </scroll-view>
-<!--          <scroll-view scroll-y>-->
-<!--            <view class="cu-list menu text-left solid-top">-->
-<!--              <view class="cu-item" style="text-align: center;">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-black">{{course.name}}</text>-->
-<!--                </view>-->
-<!--              </view>-->
-<!--              <view class="cu-item">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-grey">时段</text>-->
-<!--                </view>-->
-<!--                <view class="action">-->
-<!--                  <text class="text-black">周{{currDetailLessons[index].WeekDayFormat}}{{currDetailLessons[index].PeriodFormat}}节</text>-->
-<!--                </view>-->
-<!--              </view>-->
-<!--              <view class="cu-item">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-grey">周次</text>-->
-<!--                </view>-->
-<!--                <view class="action">-->
-<!--                  <text class="text-black">{{currDetailLessons[index].TeachingWeekFormat}}</text>-->
-<!--                </view>-->
-<!--              </view>-->
-<!--              <view class="cu-item">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-grey">时间</text>-->
-<!--                </view>-->
-<!--                <view class="action">-->
-<!--                  <text class="text-black">{{course.dayTime}}</text>-->
-<!--                </view>-->
-<!--              </view>-->
-<!--              <view class="cu-item" wx:if="{{currDetailLessons[index].Content}}">-->
-<!--                <view class="content">-->
-<!--                  <text class="text-grey">说明</text>-->
-<!--                </view>-->
-<!--                <view class="action">-->
-<!--                  <text class="text-black">{{currDetailLessons[index].Content}}</text>-->
-<!--                </view>-->
-<!--              </view>-->
-<!--            </view>-->
-<!--          </scroll-view>-->
         </swiper-item>
       </swiper>
     </view>
@@ -128,6 +59,7 @@
 
 <script setup lang="ts">
   import {Course} from "@/models/CourseModel";
+  import {getPeriodText, getTimeText, getWeeksText} from "./util";
   defineProps<{ courses: Course[], isShow: boolean }>();
   defineEmits<{ (e: 'click'): void }>();
 </script>
