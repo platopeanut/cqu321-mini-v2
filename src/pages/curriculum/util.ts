@@ -1,5 +1,5 @@
 import type {Course} from "@/models/CourseModel";
-import {calcDateAfterNDays} from "@/utils/datetime";
+import {calcDateAfterNDays, calcDayOfWeek} from "@/utils/datetime";
 
 export type CourseCell = {
     course: Course
@@ -70,11 +70,10 @@ export function makeColorMap(courses: Course[]) {
 
 // 根据date获取所在周的日期
 export function getWeekDates(date: Date) {
-    let dayOfWeek = date.getDay();   // 周几
-    if (dayOfWeek === 0) dayOfWeek = 7;
+    let dayOfWeek = calcDayOfWeek(date);
     const dateList: number[] = [];
     for (let i = dayOfWeek - 1; i >= 0; --i) {
-        dateList.push(calcDateAfterNDays(date, -i).getDate());
+        dateList.push(calcDateAfterNDays(date, -i-1).getDate());
     }
     for (let i = 0; i < 7 - dayOfWeek; ++i) {
         dateList.push(calcDateAfterNDays(date, i).getDate());
