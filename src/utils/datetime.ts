@@ -46,3 +46,9 @@ export function calcDayOfWeek(date: Date) {
     if (day === 0) day = 7;
     return day - 1;
 }
+
+export function truncDate(date: Date) {
+    const newDate = new Date(date.getTime());
+    newDate.setHours(0, 0, 0, 0)
+    return newDate;
+}

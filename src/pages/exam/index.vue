@@ -23,7 +23,7 @@
   import {computed, ref} from "vue";
   import ExamItem from "@/pages/exam/ExamItem.vue";
   import TabBar from "@/pages/exam/TabBar.vue";
-  import {calcDaysBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
+  import {calcDaysBetweenDates, stringToDateInChinaTime, truncDate} from "@/utils/datetime";
   const examModel = new ExamModel();
   const examInfoList = ref<ExamInfo[]>([]);
   const tabCur = ref(0);
@@ -58,8 +58,6 @@
   }
   function calcDays(examInfo: ExamInfo) {
     const examDate = stringToDateInChinaTime(examInfo.date);
-    const _currDate = new Date(currDate.value.getTime());
-    _currDate.setHours(0, 0, 0, 0);
-    return calcDaysBetweenDates(_currDate, examDate);
+    return calcDaysBetweenDates(truncDate(currDate.value), examDate);
   }
 </script>
