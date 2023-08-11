@@ -1,6 +1,6 @@
 <template>
   <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
-  <CourseTable :table-items="tableItems" @on-tap-detail="onTapDetail"/>
+  <CourseTable :table-items="tableItems" :curr-date="currDate" @on-tap-detail="onTapDetail"/>
   <Footer
     :week-of-term="weekOfTerm"
     @update-course-info="updateCourseInfo"
@@ -21,7 +21,12 @@ import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
 import {onShow} from "@dcloudio/uni-app";
 import {computed, ref} from "vue";
 import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
-import {calcDateAfterNDays, calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
+import {
+  calcDateAfterNDays,
+  calcDayOfWeek,
+  calcWeeksBetweenDates,
+  stringToDateInChinaTime
+} from "@/utils/datetime";
 import Header from "@/pages/curriculum/Header.vue";
 import Footer from "@/pages/curriculum/Footer.vue";
 import CourseTable from "@/pages/curriculum/CourseTable.vue";
@@ -50,14 +55,6 @@ const courseModel = new CourseModel();
   });
   const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value));
   const tableItems = computed(() => {
-    // return currWeekCourses.value.map(it => {
-    //   return {
-    //     course: it,
-    //     pos: getGridItemPosStyle(it),
-    //     bgColor: colorMap.get(it.courseNum) || 'gray',
-    //     isOverlap: false
-    //   } as CourseCell;
-    // });
     return getCourseCells(coursesMatrix.value).map(it => {
       it.bgColor = colorMap.get(it.course.code) || 'gray';
       return it;
