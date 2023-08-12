@@ -43,10 +43,10 @@ class CourseModel implements StdModel {
 
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
     const sid = (await stdUser.getUserInfo()).sid;
-    const _courses = await stdRequest<_Courses>(
-      "/edu_admin_center/fetchCourseTimetable",
-      { "code": sid, "offset": termOffset }
-    );
+    const _courses = await stdRequest<_Courses>({
+      url: "/edu_admin_center/fetchCourseTimetable",
+      data: { "code": sid, "offset": termOffset }
+    });
     await this.save(termOffset, {
       termName: _courses.session_name,
       startDate: _courses.start_date,

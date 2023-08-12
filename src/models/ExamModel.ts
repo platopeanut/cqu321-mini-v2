@@ -18,10 +18,10 @@ class ExamModel implements StdModel {
   private _examInfoList: ExamInfo[] = [];
   public async update() {
     const sid = (await stdUser.getUserInfo()).sid;
-    const res: any = await stdRequest(
-      "/edu_admin_center/fetchExam",
-      { "sid": sid }
-    );
+    const res: any = await stdRequest({
+      url: "/edu_admin_center/fetchExam",
+      data: { "sid": sid }
+    });
     const exams: any[] = res.exams;
     this._examInfoList = exams.map(it => {
       return {

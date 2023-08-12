@@ -58,11 +58,11 @@ class GradeModel implements StdModel {
     public async update() {
         const sid = (await stdUser.getUserInfo()).sid;
         const [scoresData, gpaData] = await Promise.all([
-            stdRequest<{scores: _Score[]}>(
-                "/edu_admin_center/fetchScore",
-                { "sid": sid, "is_minor": true }
-            ),
-            stdRequest<_GpaInfo>("/edu_admin_center/fetchGpaRanking")
+            stdRequest<{scores: _Score[]}>({
+                url: "/edu_admin_center/fetchScore",
+                data: { "sid": sid, "is_minor": true }
+            }),
+            stdRequest<_GpaInfo>({ url: "/edu_admin_center/fetchGpaRanking" })
         ]);
         await this.save({
             gpaInfo: {

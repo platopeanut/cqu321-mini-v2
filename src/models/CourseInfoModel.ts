@@ -34,7 +34,11 @@ export type Detail = {
 class CourseInfoModel implements StdModel {
     static async query(searchType: SearchType, value: string) {
         const data = searchType === SearchType.CourseName ? { "course_name": value } : { "teacher_name": value };
-        const res = await stdRequest<{ courses: _CourseInfo[] }>("/course_score_query/course", data, "GET");
+        const res = await stdRequest<{ courses: _CourseInfo[] }>({
+            url: "/course_score_query/course",
+            data: data,
+            method: "GET"
+        });
         const _courseInfo = res.courses;
         return _courseInfo.map(it => {
             return { name: it.name, code: it.code, instructor: it.instructor } as CourseAbstract;
@@ -42,7 +46,10 @@ class CourseInfoModel implements StdModel {
     }
 
     static async queryDetail(code: string) {
-        const res = await stdRequest<_CourseDetail>(`/course_score_query/course/${code}`, {}, "GET");
+        const res = await stdRequest<_CourseDetail>({
+            url: `/course_score_query/course/${code}`,
+            method: "GET"
+        });
         return {
             name: res.course_name,
             code: res.course_code,
