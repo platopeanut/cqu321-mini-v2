@@ -50,10 +50,8 @@
     currDate.value = new Date();
   });
   async function onTapUpdate() {
-    await uni.showLoading({title: '更新中'});
     await examModel.update();
     examInfoList.value = await examModel.get();
-    uni.hideLoading();
     await uni.showToast({ title: "更新完成", icon: "success" });
   }
   function calcDays(examInfo: ExamInfo) {

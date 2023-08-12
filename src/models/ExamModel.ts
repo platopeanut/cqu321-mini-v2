@@ -20,7 +20,9 @@ class ExamModel implements StdModel {
     const sid = (await stdUser.getUserInfo()).sid;
     const res: any = await stdRequest({
       url: "/edu_admin_center/fetchExam",
-      data: { "sid": sid }
+      data: { "sid": sid },
+      showLoading: true,
+      loadingText: "更新中"
     });
     const exams: any[] = res.exams;
     this._examInfoList = exams.map(it => {

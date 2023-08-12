@@ -1,7 +1,7 @@
 <template>
   <view class="std-border-radius margin-left margin-right padding std-box-shadow bg-white flex flex-direction text-center">
     <view v-if="!hasData" class="bg-white" @click="onTapUpdate">
-      <view class="padding-xl text-bold text-orange">点击更新课程数据</view>
+      <view class="padding-xl text-bold text-orange">👉 点击更新课程数据 👋</view>
     </view>
     <view v-else-if="courses.length === 0" class="bg-white" @click="navToCurriculumPage">
       <view>
