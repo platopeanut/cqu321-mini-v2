@@ -24,10 +24,10 @@
         </view>
       </view>
       <view class="grid-container bottom-table">
-        <view class="today-col" :style="{gridColumnStart: dayOfWeek}"></view>
+        <view v-if="currWeekOfTerm === fixedWeekOfTerm" class="today-col" :style="{gridColumnStart: dayOfWeek}"></view>
       </view>
       <view class="grid-container top-table">
-        <view :style="{
+        <view v-if="currWeekOfTerm === fixedWeekOfTerm" :style="{
           gridColumnStart: dayOfWeek,
           gridRowStart: idxOfDay[0] + 1,
           gridRowEnd: idxOfDay[0] + 2,
@@ -43,7 +43,12 @@
   import {calcDayOfWeek} from "@/utils/datetime";
   import {computed} from "vue";
   import {calcCurrPeriod} from "@/pages/curriculum/util";
-  const props = defineProps<{ tableItems: CourseCell[], currDate: Date }>();
+  const props = defineProps<{
+    tableItems: CourseCell[],
+    currDate: Date,
+    fixedWeekOfTerm: number,
+    currWeekOfTerm: number
+  }>();
   defineEmits<{ (e: 'onTapDetail', course: Course) : void }>();
   const dayOfWeek = computed(()=>{
     return calcDayOfWeek(props.currDate) + 1;
@@ -91,6 +96,6 @@
   }
 
   .time-line {
-    border-bottom: 5rpx solid red;
+    border-bottom: 8rpx solid #fd6260;
   }
 </style>

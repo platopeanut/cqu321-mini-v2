@@ -9,7 +9,7 @@
         :score-item="item"
       />
     </view>
-    <view v-else>
+    <view v-else class="bg-white padding std-box-shadow">
       <Overview v-if="gpaInfo !== null" :gpa-info="gpaInfo" />
       <Empty v-else icon-type="warning" message="请尝试更新数据" />
       <view @click="updateGradeInfo" class="cu-btn block round lg" :class="isLoading ? 'bg-green' : 'bg-blue'"  style="width: max-content; margin: 0 auto;">

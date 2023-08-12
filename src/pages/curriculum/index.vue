@@ -1,6 +1,11 @@
 <template>
   <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
-  <CourseTable :table-items="tableItems" :curr-date="currDate" @on-tap-detail="onTapDetail"/>
+  <CourseTable
+      :table-items="tableItems"
+      :curr-date="currDate"
+      :curr-week-of-term="weekOfTerm"
+      :fixed-week-of-term="fixedWeekOfTerm"
+      @on-tap-detail="onTapDetail"/>
   <Footer
     :week-of-term="weekOfTerm"
     @update-course-info="updateCourseInfo"
@@ -35,6 +40,7 @@
   const courseModel = CourseModel.getInstance();
   // CONST
   let colorMap: Map<string, string>;
+  let fixedWeekOfTerm: number = 0;
   // STATUS
   const termOffset = ref<TermOffset>(TermOffset.CurrTerm);
   const termName = ref<string>("unknown");
@@ -72,11 +78,12 @@
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
       courses.value = coursesData.courses;
       colorMap = makeColorMap(courses.value);
+      fixedWeekOfTerm = weekOfTerm.value;
     }
   }
 
   // HOOK
-  onShow(async () => { await initData(); });
+  onShow(initData);
   async function updateCourseInfo() {
     await uni.showLoading({title: "更新中"});
     await courseModel.update(termOffset.value);
