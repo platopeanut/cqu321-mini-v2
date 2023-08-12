@@ -3,6 +3,11 @@ export function formatNumber(n: number) {
   return s[1] ? s : '0' + s
 }
 
+export function formatTextOverflow(text: string, maxLength: number) {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + '...';
+}
+
 export function range(start: number, end: number) {
   const li: number[] = [];
   for (let i = start; i < end; i++) {

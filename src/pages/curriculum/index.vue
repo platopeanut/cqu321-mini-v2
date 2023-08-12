@@ -17,22 +17,22 @@
 </template>
 
 <script setup lang="ts">
-import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
-import {onShow} from "@dcloudio/uni-app";
-import {computed, ref} from "vue";
-import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
-import {
-  calcDateAfterNDays,
-  calcDayOfWeek,
-  calcWeeksBetweenDates,
-  stringToDateInChinaTime
-} from "@/utils/datetime";
-import Header from "@/pages/curriculum/Header.vue";
-import Footer from "@/pages/curriculum/Footer.vue";
-import CourseTable from "@/pages/curriculum/CourseTable.vue";
-import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
+  import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
+  import {onShow} from "@dcloudio/uni-app";
+  import {computed, ref} from "vue";
+  import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
+  import {
+    calcDateAfterNDays,
+    calcDayOfWeek,
+    calcWeeksBetweenDates,
+    stringToDateInChinaTime
+  } from "@/utils/datetime";
+  import Header from "@/pages/curriculum/Header.vue";
+  import Footer from "@/pages/curriculum/Footer.vue";
+  import CourseTable from "@/pages/curriculum/CourseTable.vue";
+  import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
 
-const courseModel = new CourseModel();
+  const courseModel = CourseModel.getInstance();
   // CONST
   let colorMap: Map<string, string>;
   // STATUS

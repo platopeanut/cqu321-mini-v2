@@ -1,6 +1,6 @@
 <template>
   <view class="std-bg-primary">
-    <CourseCard />
+    <CourseCard curriculum-page-url="../curriculum/index"/>
     <view class="bg-white margin std-border-radius std-box-shadow shadow padding-top padding-bottom">
       <view class="icons-1st padding-bottom">
         <Icon1st title="课表" icon-name="cuIcon-calendar" @click="navToCurriculumPage"/>
@@ -24,7 +24,7 @@
 <script setup lang="ts">
   import Icon1st from "@/pages/index/Icon1st.vue";
   import Icon2nd from "@/pages/index/Icon2nd.vue";
-  import CourseCard from "@/pages/index/CourseCard.vue";
+  import CourseCard from "@/pages/curriculum/CourseCard.vue";
   function navToGradePage() {
     uni.navigateTo({url: "../grade/index"});
   }

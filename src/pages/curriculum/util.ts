@@ -185,7 +185,7 @@ export function getTimeText(course: Course) {
     return start + ' ~ ' + end;
 }
 
-function _calcMinutes(hour: number, minute: number) {
+export function calcMinutes(hour: number, minute: number) {
     return hour * 60 + minute;
 }
 export function calcCurrPeriod(date: Date): [number, number] {
@@ -196,9 +196,9 @@ export function calcCurrPeriod(date: Date): [number, number] {
         const period = TIME_TABLE[i].split('~').map(it => it.split(':'));
         const [startH, startM] = [parseInt(period[0][0]), parseInt(period[0][1])];
         const [endH, endM] = [parseInt(period[1][0]), parseInt(period[1][1])];
-        const curr = _calcMinutes(hour, minute);
-        const start = _calcMinutes(startH, startM);
-        const end = _calcMinutes(endH, endM);
+        const curr = calcMinutes(hour, minute);
+        const start = calcMinutes(startH, startM);
+        const end = calcMinutes(endH, endM);
         if (curr <= end) {
             if (curr <= start) return [i, 0];
             return [i, (curr - start) / (end - start)];
