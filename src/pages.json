@@ -53,6 +53,12 @@
 			"style": {
 				"navigationBarTitleText": "常用信息"
 			}
+		},
+		{
+			"path": "pages/content/index",
+			"style": {
+				"navigationBarTitleText": "Article"
+			}
 		}
 	],
 	"globalStyle": {

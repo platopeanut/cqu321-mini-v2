@@ -1,5 +1,6 @@
 <template>
   <view class="std-bg-primary">
+    <ActivityCard />
     <CourseCard curriculum-page-url="../curriculum/index"/>
     <view class="bg-white margin std-border-radius std-box-shadow shadow padding-top padding-bottom">
       <view class="icons-1st padding-bottom">
@@ -25,6 +26,7 @@
   import Icon1st from "@/pages/index/Icon1st.vue";
   import Icon2nd from "@/pages/index/Icon2nd.vue";
   import CourseCard from "@/pages/curriculum/CourseCard.vue";
+  import ActivityCard from "@/pages/index/ActivityCard.vue";
   function navToGradePage() {
     uni.navigateTo({url: "../grade/index"});
   }
@@ -46,9 +48,9 @@
 </script>
 
 <style scoped>
-.icons-1st {
-  display: flex;
-  justify-content: space-evenly;
-  border-radius: 20rpx;
-}
+  .icons-1st {
+    display: flex;
+    justify-content: space-evenly;
+    border-radius: 20rpx;
+  }
 </style>
