@@ -16,6 +16,8 @@ export type StdRequestOptions = {
   method?: RequestMethod
   needToken?: boolean
   showError?: boolean
+  showLoading?: boolean
+  loadingText?: string
 }
 export async function stdRequest<ResType> (options: StdRequestOptions) {
   // SET DEFAULT
@@ -23,24 +25,24 @@ export async function stdRequest<ResType> (options: StdRequestOptions) {
   if (options.method === undefined) options.method = "POST";
   if (options.needToken === undefined) options.needToken = true;
   if (options.showError === undefined) options.showError = false;
+  if (options.showLoading === undefined) options.showLoading = false;
 
   let header: any = {};
   if (options.needToken) {
     const tokenInfo = await handleToken();
     header["Authorization"] = "Bearer " + tokenInfo.token;
   }
+  if (options.showLoading) await uni.showLoading({ title: options.loadingText });
   const res = await uni.request({
     url: BASE_URL + options.url,
     method: options.method,
     header: header,
     data: options.data
   });
+  if (options.showLoading) uni.hideLoading();
   if (options.showError && res.statusCode !== 200) {
     console.error(res.statusCode, (res.data as any).msg);
-    await uni.showToast({
-      title: `【${res.statusCode}】${(res.data as any).msg}`,
-      icon: "error"
-    });
+    await uni.showToast({ title: `❌【${res.statusCode}】${(res.data as any).msg}`, icon: "none" });
   }
   const response = res.data as StdResponse<ResType>;
   return response.data;

@@ -85,10 +85,8 @@
   // HOOK
   onShow(initData);
   async function updateCourseInfo() {
-    await uni.showLoading({title: "更新中"});
     await courseModel.update(termOffset.value);
     await initData();
-    uni.hideLoading();
     await uni.showToast({
       title: "更新完成",
       icon: "success"

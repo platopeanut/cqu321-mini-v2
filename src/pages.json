@@ -59,6 +59,12 @@
 			"style": {
 				"navigationBarTitleText": "Article"
 			}
+		},
+		{
+			"path": "pages/library/index",
+			"style": {
+				"navigationBarTitleText": "图书馆"
+			}
 		}
 	],
 	"globalStyle": {

@@ -86,10 +86,8 @@
     }
   }
   async function onTapUpdate() {
-    await uni.showLoading({title: "更新中"});
     await courseModel.update(TermOffset.CurrTerm);
     await initData();
-    uni.hideLoading();
     await uni.showToast({
       title: "更新完成",
       icon: "success"

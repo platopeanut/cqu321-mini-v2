@@ -11,7 +11,7 @@
       </view>
       <view class="icons-1st padding-top">
         <Icon2nd title="常用信息" icon-name="cuIcon-evaluate_fill" @click="navToGeneralInfoPage" />
-        <Icon2nd title="图书馆" icon-name="cuIcon-read" />
+        <Icon2nd title="图书馆" icon-name="cuIcon-read" @click="navToLibraryPage"/>
         <Icon2nd title="生活" icon-name="cuIcon-baby" />
 <!--        <Icon2nd title="空教室" icon-name="cuIcon-location" />-->
         <Icon2nd title="体测查询" icon-name="cuIcon-footprint" />
@@ -44,6 +44,9 @@
   }
   function navToGeneralInfoPage() {
     uni.navigateTo({url: "../general_info/index"});
+  }
+  function navToLibraryPage() {
+    uni.navigateTo({url: "../library/index"});
   }
 </script>
 
