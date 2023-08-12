@@ -29,3 +29,36 @@ export async function stdClearAllStorage() {
   await stdUser.clear();
   await stdToken.clear();
 }
+
+/**
+ * @param {string} tempFilePath 临时文件路径
+ * @return {string} 持久化文件路径
+ */
+export async function stdSaveFile(tempFilePath: string) {
+  const fs = uni.getFileSystemManager();
+  return new Promise<string>((resolve) => {
+    fs.saveFile({
+      tempFilePath: tempFilePath,
+      success: result => { resolve(result.savedFilePath); },
+      fail: err => { throw err.errMsg; }
+    });
+  });
+}
+
+/**
+ * @param {string} url 文件路径
+ * @return {string | null} 持久化文件路径
+ */
+export async function downloadAndSaveFile(url: string) {
+  try {
+    const res = await uni.downloadFile({ url: url });
+    if (res.statusCode === 200) return await stdSaveFile(res.tempFilePath);
+    else {
+      console.error(`[DownloadAndSaveFile] [${res.statusCode}] ${res.errMsg}`);
+      return null;
+    }
+  } catch (e) {
+    console.error('[DownloadAndSaveFile]', e);
+    return null;
+  }
+}

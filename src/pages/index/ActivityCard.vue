@@ -10,7 +10,7 @@
         :key="index"
         class="text-center"
         @click="() => { navToDetail(activityItem) }">
-        <image class="img" :src="getImgUrl(activityItem.url)" mode="scaleToFill" show-menu-by-longpress></image>
+        <image class="img" :src="activityItem.localUrl || activityItem.url" mode="scaleToFill" show-menu-by-longpress></image>
       </swiper-item>
     </swiper>
   </view>
@@ -20,7 +20,6 @@
   import ActivityModel, {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
   import {computed, ref} from "vue";
   import {onShow} from "@dcloudio/uni-app";
-  import {getImgUrl} from "@/core/old";
   const activityModel = new ActivityModel();
   const activityInfo = ref<ActivityInfo | null>(null);
   const activityItems = computed<ActivityItem[]>(() => activityInfo.value?.pictures || []);
