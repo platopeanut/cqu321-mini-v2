@@ -52,3 +52,16 @@ export function truncDate(date: Date) {
     newDate.setHours(0, 0, 0, 0)
     return newDate;
 }
+
+export function getCurrTime() {
+    const date = new Date();
+    return `${formatNumber(date.getHours())}:${formatNumber(date.getMinutes())}`;
+}
+
+export function getCurrDate() {
+    const date = new Date();
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    return `${year}-${formatNumber(month)}-${formatNumber(day)}`;
+}

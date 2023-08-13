@@ -1,0 +1,41 @@
+.form-item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 30rpx 0;
+}
+
+.form-item > .bar {
+    padding-bottom: 10rpx;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-item > .bar > .title {
+    text-align: left;
+}
+
+.form-item > .bar > .hint {
+    color: red;
+    text-align: right;
+}
+
+.form-item > .content {
+    height: 100rpx;
+    line-height: 100rpx;
+    padding: 0 20rpx;
+    border: 1px solid grey;
+    border-radius: 5rpx;
+}
+
+.form-item .active {
+    border: 2px solid #0081ff;
+}
+
+.form-item .error {
+    border: 2px solid red;
+}
+
+.required-star {
+    color: red;
+}
