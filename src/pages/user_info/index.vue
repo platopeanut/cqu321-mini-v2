@@ -15,7 +15,7 @@
         v-model:value="info.password"
         :check="isCheck"
     />
-    <RadioSelector is-required title="身份" v-model:value="info.identity" :options="['本科生', '研究生']"/>
+    <RadioSelector is-required title="身份" v-model:idx="info.identity" :options="['本科生', '研究生']"/>
     <FormButton @click="onTapLogin">登录</FormButton>
   </Form>
 </template>
@@ -31,7 +31,7 @@
   const info = ref({
     username: "",
     password: "",
-    identity: "本科生"
+    identity: 0
   });
   const isCheck = ref(false);
   function checkInfo() {
