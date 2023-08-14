@@ -15,6 +15,7 @@ export enum TermOffset {
 
 class CourseModel implements StdModel {
   private static _instance: CourseModel | null = null;
+  private constructor() {}
   public static getInstance() {
     if (this._instance === null)
       this._instance = new CourseModel();
