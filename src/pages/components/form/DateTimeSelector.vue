@@ -2,14 +2,13 @@
   <view class="form-item-row">
     <view class="title"><text class="required-star">* </text>{{title}}</view>
     <picker
-        class="content"
-        :class="isFocus ? 'active' : ''"
-        :range="options"
-        :value="idx"
+        class="content" :class="isFocus ? 'active' : ''"
+        :mode="type"
+        :value="value"
         @change="onChange"
         @click="isFocus = true"
         @cancel="isFocus = false"
-    >{{options[idx]}}</picker>
+    >{{value}}</picker>
   </view>
 </template>
 
@@ -17,14 +16,14 @@
   import {ref} from "vue";
   defineProps<{
     title: string
-    options: string[]
-    idx: number
+    type: "time" | "date"
+    value: string
   }>();
-  const emit = defineEmits<{ (e: 'update:idx', newValue: number): void }>();
+  const emit = defineEmits<{ (e: 'update:value', newValue: string): void }>();
   const isFocus = ref(false);
   function onChange(e: any) {
     isFocus.value = false;
-    emit('update:idx', parseInt(e.detail.value));
+    emit('update:value', e.detail.value);
   }
 </script>
 
