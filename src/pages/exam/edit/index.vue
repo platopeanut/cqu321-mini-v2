@@ -41,7 +41,7 @@
   onLoad((option: any) => {
     if (option.name) {
       const info = examModel.getByName(option.name);
-      if (info) examInfo.value = info;
+      if (info) examInfo.value = { ...info };
     }
   });
   function checkInfo() {
@@ -52,6 +52,8 @@
     if (!checkInfo()) return;
     await examModel.add(examInfo.value);
     await uni.navigateBack({ delta: 1 });
-    await uni.showToast({ title: '已添加', icon: "success" });
+    setTimeout(async () => {
+      await uni.showToast({ title: '已添加', icon: "success" });
+    }, 200);
   }
 </script>
