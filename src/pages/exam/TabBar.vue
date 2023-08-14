@@ -5,13 +5,17 @@
       @click="$emit('onTapUpdate')"
       class="icon cuIcon-refresh text-bold std-color-secondary"
     ></view>
+    <view
+        @click="$emit('onTapAdd')"
+        class="icon cuIcon-add text-bold std-color-secondary"
+    ></view>
     <view @click="$emit('onTapTab', 1)" class="text-xl tab" :class="tabCur === 1 ? 'active' : ''">已结束</view>
   </view>
 </template>
 
 <script setup lang="ts">
   defineProps<{ tabCur: number }>();
-  defineEmits<{ (e: 'onTapUpdate'): void, (e: 'onTapTab', idx: number): void }>();
+  defineEmits<{ (e: 'onTapUpdate'): void, (e: 'onTapAdd'): void, (e: 'onTapTab', idx: number): void }>();
 </script>
 
 <style scoped>

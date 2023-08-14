@@ -14,6 +14,13 @@ export type ExamInfo = {
 }
 
 class ExamModel implements StdModel {
+  private static _instance: ExamModel | null = null;
+  private constructor() {}
+  public static getInstance() {
+    if (this._instance === null)
+      this._instance = new ExamModel();
+    return this._instance;
+  }
   private static STORAGE_KEY = "ExamsInfo";
   private _examInfoList: ExamInfo[] = [];
   public async update() {
@@ -53,6 +60,26 @@ class ExamModel implements StdModel {
     if (this._examInfoList.length === 0)
       await this.load();
     return this._examInfoList;
+  }
+  public getByName(name: string) {
+    return this._examInfoList.find(it => it.name === name);
+  }
+  public async add(examInfo: ExamInfo) {
+    const name = this.isSelfExam(examInfo.name) ? examInfo.name : examInfo.name + '🍒';
+    // 清除已存在的相同名称
+    this._examInfoList = this._examInfoList.filter(it => it.name !== name);
+    examInfo.name = name;
+    this._examInfoList.push(examInfo);
+    await this.save();
+    await this.load();
+  }
+  public isSelfExam(name: string) {
+    return name.includes('🍒');
+  }
+  public async deleteByName(name: string) {
+    this._examInfoList = this._examInfoList.filter(it => it.name !== name);
+    await this.save();
+    await this.load();
   }
 }
 export default ExamModel;

@@ -3,15 +3,18 @@
       :tab-cur="tabCur"
       @on-tap-tab="newTabCur => tabCur = newTabCur"
       @on-tap-update="onTapUpdate"
+      @on-tap-add="onTapAdd"
   />
   <view class="std-bg-primary padding-top padding-bottom-xl" style="margin-top: 80rpx;">
     <Empty v-if="currExamInfoList.length === 0" message="暂无考试安排" icon-type="success" hint="请尝试刷新"/>
     <ExamItem
         v-for="examInfo in currExamInfoList"
-        :key="examInfo.code"
+        :key="examInfo.name"
         :exam-info="examInfo"
         :days="calcDays(examInfo)"
         :is-over="tabCur !== 0"
+        :is-self="examModel.isSelfExam(examInfo.name)"
+        @click="onTapExamItem"
     />
   </view>
 </template>
@@ -24,7 +27,7 @@
   import ExamItem from "@/pages/exam/ExamItem.vue";
   import TabBar from "@/pages/exam/TabBar.vue";
   import {calcDaysBetweenDates, stringToDateInChinaTime, truncDate} from "@/utils/datetime";
-  const examModel = new ExamModel();
+  const examModel = ExamModel.getInstance();
   const examInfoList = ref<ExamInfo[]>([]);
   const tabCur = ref(0);
   const currDate = ref(new Date());
@@ -57,5 +60,24 @@
   function calcDays(examInfo: ExamInfo) {
     const examDate = stringToDateInChinaTime(examInfo.date);
     return calcDaysBetweenDates(truncDate(currDate.value), examDate);
+  }
+  async function onTapAdd() {
+    await uni.navigateTo({ url: "./edit/index" });
+  }
+  async function onTapExamItem(examInfo: ExamInfo) {
+    if (!examModel.isSelfExam(examInfo.name)) return;
+    await uni.showActionSheet({
+      itemList: ['删除', '修改'],
+      success: async (result) => {
+        if (result.tapIndex === 0) {
+          await examModel.deleteByName(examInfo.name);
+          examInfoList.value = await examModel.get();
+          await uni.showToast({ title: "已删除", icon: "success" });
+        }
+        else {
+          await uni.navigateTo({ url: './edit/index?name=' + examInfo.name });
+        }
+      }
+    });
   }
 </script>

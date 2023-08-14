@@ -1,5 +1,5 @@
 <template>
-  <view class="card margin padding std-box-shadow text-df std-color-secondary bg-white">
+  <view @click="$emit('click', examInfo)" class="card margin padding std-box-shadow text-df std-color-secondary bg-white">
     <view class="flex justify-between">
       <view class="text-xl text-bold text-black">{{examInfo.name}}</view>
       <view class="flex align-center">
@@ -22,7 +22,8 @@
   import type {ExamInfo} from "@/models/ExamModel";
   import {computed} from "vue";
   import {calcHintColorClass} from "@/pages/exam/util";
-  const props = defineProps<{ examInfo: ExamInfo, days: number, isOver: boolean }>();
+  const props = defineProps<{ examInfo: ExamInfo, days: number, isOver: boolean, isSelf: boolean }>();
+  defineEmits<{ (e: 'click', examInfo: ExamInfo): void }>();
   const hint = computed(() => {
     if (props.days === 0) return { left: '今天', right: '' };
     if (props.days === 1) return { left: '明天', right: ''};
