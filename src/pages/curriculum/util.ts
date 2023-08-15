@@ -156,23 +156,24 @@ export function getPeriodText(course: Course) {
     return `周${week} ${course.dayTime.period.start}-${course.dayTime.period.end}节`;
 }
 
-export function getWeeksText(course: Course) {
-    const weeks: number[][] = [[course.weeks[0]]];
-    for (let i = 1; i < course.weeks.length; i++) {
-        if (course.weeks[i] === course.weeks[i - 1] + 1) {
-            weeks[weeks.length - 1].push(course.weeks[i]);
+export function getWeeksText(weeks: number[]) {
+    if (weeks.length === 0) return "";
+    const weekMatrix: number[][] = [[weeks[0]]];
+    for (let i = 1; i < weeks.length; i++) {
+        if (weeks[i] === weeks[i - 1] + 1) {
+            weekMatrix[weekMatrix.length - 1].push(weeks[i]);
         }
-        else { weeks.push([course.weeks[i]]); }
+        else { weekMatrix.push([weeks[i]]); }
     }
     let text = '';
-    for (let i = 0; i < weeks.length; i++) {
-        if (weeks[i].length === 1) {
-            text += `${weeks[i][0]}`;
+    for (let i = 0; i < weekMatrix.length; i++) {
+        if (weekMatrix[i].length === 1) {
+            text += `${weekMatrix[i][0]}`;
         }
         else {
-            text += `${weeks[i][0]}-${weeks[i][weeks[i].length - 1]}`;
+            text += `${weekMatrix[i][0]}-${weekMatrix[i][weekMatrix[i].length - 1]}`;
         }
-        if (i < weeks.length - 1) text += ', ';
+        if (i < weekMatrix.length - 1) text += ', ';
     }
     return text;
 }

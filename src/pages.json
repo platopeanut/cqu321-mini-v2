@@ -19,6 +19,12 @@
 			}
 		},
 		{
+			"path": "pages/curriculum/edit/index",
+			"style": {
+				"navigationBarTitleText": "课表设置"
+			}
+		},
+		{
 			"path": "pages/settings/index",
 			"style": {
 				"navigationBarTitleText": "设置"

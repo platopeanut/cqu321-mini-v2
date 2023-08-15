@@ -6,6 +6,8 @@ import stdUser from "@/core/StdUser";
 type CoursesInfo = {
   currTerm: CoursesData | null
   nextTerm: CoursesData | null
+  custom: Course[] | null
+  priority: string[] | null
 };
 
 export enum TermOffset {
@@ -34,7 +36,6 @@ class CourseModel implements StdModel {
       return this._coursesInfo.nextTerm;
     else return null;
   }
-
   public getTermNames() {
     return {
       curr: this._coursesInfo?.currTerm?.termName || null,
@@ -64,7 +65,7 @@ class CourseModel implements StdModel {
     try {
       coursesInfo = await stdGetStorage<CoursesInfo>(CourseModel.STORAGE_KEY);
     } catch (e) {
-      coursesInfo = { currTerm: null, nextTerm: null };
+      coursesInfo = { currTerm: null, nextTerm: null, custom: null, priority: null };
     }
     return coursesInfo;
   }
@@ -78,7 +79,44 @@ class CourseModel implements StdModel {
     await stdSetStorage(CourseModel.STORAGE_KEY, coursesInfo);
     this._coursesInfo = await this.load();
   }
-
+  public async getCustom() {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    return this._coursesInfo.custom || [];
+  }
+  public async addCustom(course: Course) {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    if (!this._coursesInfo.custom) this._coursesInfo.custom = [];
+    this._coursesInfo.custom.push(course);
+    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
+    this._coursesInfo = await this.load();
+  }
+  public async delCustom(name: string) {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    if (this._coursesInfo.custom === null) return;
+    this._coursesInfo.custom = this._coursesInfo.custom.filter(it => it.name !== name);
+    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
+    this._coursesInfo = await this.load();
+  }
+  public async getPriority() {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    return this._coursesInfo.priority || [];
+  }
+  public async setPriority(code: string) {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    if (!this._coursesInfo.priority) this._coursesInfo.priority = [];
+    // 先清理
+    this._coursesInfo.priority = this._coursesInfo.priority.filter(it => it !== code);
+    this._coursesInfo.priority.push(code);
+    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
+    this._coursesInfo = await this.load();
+  }
+  public async clearPriority(code: string) {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    if (!this._coursesInfo.priority) return;
+    this._coursesInfo.priority = this._coursesInfo.priority.filter(it => it !== code);
+    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
+    this._coursesInfo = await this.load();
+  }
 }
 export default CourseModel;
 
@@ -96,12 +134,13 @@ export interface Course {
   courseNum: string
   credit: number
   weeks: number[]
-  dayTime: {
-    weekday: number
-    period: {
-      start: number
-      end: number
-    }
+  dayTime: DayTime
+}
+export type DayTime = {
+  weekday: number
+  period: {
+    start: number
+    end: number
   }
 }
 interface _Courses {

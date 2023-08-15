@@ -79,6 +79,8 @@
       courses.value = coursesData.courses;
       colorMap = makeColorMap(courses.value);
       fixedWeekOfTerm = weekOfTerm.value;
+      // 自定义课表
+      courses.value.push(...await courseModel.getCustom());
     }
   }
 
@@ -107,8 +109,9 @@
         '云存储PUSH',
         '云存储FETCH'
       ],
-      success(result: UniNamespace.ShowActionSheetRes): void {
+      success: async result => {
         if (result.tapIndex === 0) { onTapSwitchTerm(); }
+        else if (result.tapIndex === 1) { await uni.navigateTo({ url: './edit/index' }); }
       }
     });
   }

@@ -38,7 +38,7 @@
             </view>
             <view class="flex justify-between margin-top">
               <view class="text-grey">上课周数</view>
-              <view>{{getWeeksText(course)}}</view>
+              <view>{{getWeeksText(course.weeks)}}</view>
             </view>
             <view class="flex justify-between margin-top">
               <view class="text-grey">上课时段</view>
