@@ -46,8 +46,15 @@ export enum GpaType {
 
 class GradeModel implements StdModel {
     private static STORAGE_KEY = "ScoreItems";
+    private static _instance: GradeModel | null = null;
     private _gradeInfo: GradeInfo | null = null;
-
+    private constructor() {}
+    public static getInstance() {
+        if (this._instance === null)
+            this._instance = new GradeModel();
+        return this._instance;
+    }
+    public reload() { this._gradeInfo = null; }
     public async get() {
         if (this._gradeInfo === null) {
             this._gradeInfo = await this.load();

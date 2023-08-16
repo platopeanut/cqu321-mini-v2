@@ -21,6 +21,7 @@ class ExamModel implements StdModel {
       this._instance = new ExamModel();
     return this._instance;
   }
+  public reload() { this._examInfoList = []; }
   private static STORAGE_KEY = "ExamsInfo";
   private _examInfoList: ExamInfo[] = [];
   public async update() {

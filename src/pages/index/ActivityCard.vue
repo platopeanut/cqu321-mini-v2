@@ -20,7 +20,7 @@
   import ActivityModel, {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
   import {computed, ref} from "vue";
   import {onShow} from "@dcloudio/uni-app";
-  const activityModel = new ActivityModel();
+  const activityModel = ActivityModel.getInstance();
   const activityInfo = ref<ActivityInfo | null>(null);
   const activityItems = computed<ActivityItem[]>(() => activityInfo.value?.pictures || []);
   onShow(async () => { activityInfo.value = await activityModel.get() });

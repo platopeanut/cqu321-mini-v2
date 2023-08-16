@@ -36,7 +36,7 @@ import TermOverview from "@/pages/grade/TermOverview.vue";
 import GradeItem from "@/pages/grade/GradeItem.vue";
   import Empty from "@/pages/components/Empty.vue";
 
-  const gradeModel = new GradeModel();
+  const gradeModel = GradeModel.getInstance();
 
   const tabCur = ref(0);
   // 成绩信息

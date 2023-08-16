@@ -23,7 +23,7 @@ class CourseModel implements StdModel {
       this._instance = new CourseModel();
     return this._instance;
   }
-
+  public reload() { this._coursesInfo = null; }
   private static STORAGE_KEY = "CoursesInfo";
 
   private _coursesInfo: CoursesInfo | null = null;

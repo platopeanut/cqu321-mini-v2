@@ -31,17 +31,21 @@
 
 <script setup lang="ts">
   import {stdClearAllStorage} from "@/core/storage";
+  import ActivityModel from "@/models/ActivityModel";
+  import CourseModel from "@/models/CourseModel";
+  import ExamModel from "@/models/ExamModel";
+  import GradeModel from "@/models/GradeModel";
 
   function navToUserInfoPage() {
     uni.navigateTo({url: "../user_info/index"});
   }
-  function clearCache() {
-    stdClearAllStorage().then(() => {
-      uni.showToast({
-        title: "已清除",
-        icon: "success"
-      });
-    });
+  async function clearCache() {
+    await stdClearAllStorage();
+    ActivityModel.getInstance().reload();
+    CourseModel.getInstance().reload();
+    ExamModel.getInstance().reload();
+    GradeModel.getInstance().reload();
+    await uni.showToast({ title: "已清除", icon: "success"});
   }
 </script>
 
