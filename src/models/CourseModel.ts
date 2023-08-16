@@ -8,6 +8,7 @@ type CoursesInfo = {
   nextTerm: CoursesData | null
   custom: Course[] | null
   priority: string[] | null
+  currSelectTerm: TermOffset | null
 };
 
 export enum TermOffset {
@@ -71,7 +72,13 @@ class CourseModel implements StdModel {
     try {
       coursesInfo = await stdGetStorage<CoursesInfo>(CourseModel.STORAGE_KEY);
     } catch (e) {
-      coursesInfo = { currTerm: null, nextTerm: null, custom: null, priority: null };
+      coursesInfo = {
+        currTerm: null,
+        nextTerm: null,
+        custom: null,
+        priority: null,
+        currSelectTerm: TermOffset.CurrTerm
+      };
     }
     return coursesInfo;
   }
@@ -120,6 +127,16 @@ class CourseModel implements StdModel {
     if (!this._coursesInfo) this._coursesInfo = await this.load();
     if (!this._coursesInfo.priority) return;
     this._coursesInfo.priority = this._coursesInfo.priority.filter(it => it !== code);
+    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
+    this._coursesInfo = await this.load();
+  }
+  public async getCurrSelectTerm() {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    return this._coursesInfo.currSelectTerm || TermOffset.CurrTerm;
+  }
+  public async setCurrSelectTerm(currSelectTerm: TermOffset) {
+    if (!this._coursesInfo) this._coursesInfo = await this.load();
+    this._coursesInfo.currSelectTerm = currSelectTerm;
     await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
     this._coursesInfo = await this.load();
   }

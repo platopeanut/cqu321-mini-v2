@@ -68,6 +68,7 @@
   });
 
   async function initData() {
+    termOffset.value = await courseModel.getCurrSelectTerm();
     const coursesData = await courseModel.get(termOffset.value);
     termName.value = "unknown";
     currDate.value = new Date();
@@ -126,6 +127,7 @@
       itemList: itemList,
       success(result: UniNamespace.ShowActionSheetRes): void {
         termOffset.value = result.tapIndex;
+        courseModel.setCurrSelectTerm(termOffset.value);
         initData();
         if ((termOffset.value === TermOffset.CurrTerm ? termNames.curr : termNames.next) === null) {
           updateCourseInfo();
