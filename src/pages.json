@@ -7,6 +7,12 @@
 			}
 		},
 		{
+			"path": "pages/index/content/index",
+			"style": {
+				"navigationBarTitleText": "Article"
+			}
+		},
+		{
 			"path": "pages/grade/index",
 			"style": {
 				"navigationBarTitleText": "成绩查询"
@@ -76,12 +82,6 @@
 			"path": "pages/general_info/index",
 			"style": {
 				"navigationBarTitleText": "常用信息"
-			}
-		},
-		{
-			"path": "pages/content/index",
-			"style": {
-				"navigationBarTitleText": "Article"
 			}
 		},
 		{

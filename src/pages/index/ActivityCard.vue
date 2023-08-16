@@ -26,7 +26,7 @@
   const activityItems = computed<ActivityItem[]>(() => activityInfo.value?.pictures || []);
   onShow(async () => { activityInfo.value = await activityModel.get() });
   async function navToDetail(activityItem: ActivityItem) {
-    await uni.navigateTo({ url: '../content/index?url=' + activityItem.contentUrl });
+    await uni.navigateTo({ url: './content/index?url=' + activityItem.contentUrl });
   }
   // TODO: 检测活动是否需要更新（目前的策略是缓存中没有活动数据采取更新）
 </script>
