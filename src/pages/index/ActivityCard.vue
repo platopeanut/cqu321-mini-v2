@@ -1,16 +1,17 @@
 <template>
-  <view class="std-box-shadow bg-white margin-bottom">
+  <view class="std-box-shadow bg-white margin-bottom" style="width: 100%; height: 400rpx;">
     <swiper
       class="square-dot"
       indicator-dots
       circular
+      style="height: 100%;"
     >
       <swiper-item
         v-for="(activityItem, index) in activityItems"
         :key="index"
         class="text-center"
         @click="() => { navToDetail(activityItem) }">
-        <image class="img" :src="activityItem.localUrl || activityItem.url" mode="scaleToFill" show-menu-by-longpress></image>
+        <image class="img" :src="activityItem.localUrl || activityItem.url" mode="aspectFit" show-menu-by-longpress></image>
       </swiper-item>
     </swiper>
   </view>
@@ -32,7 +33,7 @@
 
 <style scoped>
   .img {
-    width: 750rpx;
-    height: 400rpx;
+    width: 100%;
+    height: 100%;
   }
 </style>
