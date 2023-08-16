@@ -1,31 +1,9 @@
 <template>
   <view class="std-bg-primary padding">
-    <view class="cu-list menu margin std-box-shadow std-border-radius bg-white">
-      <view class="cu-item arrow" @click="navToUserInfoPage">
-        <view class="content">
-          <text class="cuIcon-form text-yellow"></text>
-          <text class="text-grey">绑定信息</text>
-        </view>
-      </view>
-      <view class="cu-item" @click="clearCache">
-        <view class="content">
-          <text class="cuIcon-refresh text-red"></text>
-          <text class="text-grey">清除缓存</text>
-        </view>
-      </view>
-      <view class="cu-item arrow">
-        <view class="content">
-          <text class="cuIcon-read text-orange"></text>
-          <text class="text-grey">使用教程</text>
-        </view>
-      </view>
-      <view class="cu-item arrow">
-        <view class="content">
-          <text class="cuIcon-formfill text-green"></text>
-          <text class="text-grey">关于我们</text>
-        </view>
-      </view>
-    </view>
+    <UserInfoCard :info="info" />
+    <MenuItem title="清除缓存" icon-style="cuIcon-refresh text-red" @click="clearCache" />
+    <MenuItem title="使用教程" icon-style="cuIcon-read text-orange" has-arrow @click="navToTutorial"/>
+    <MenuItem title="关于我们" icon-style="cuIcon-formfill text-green" has-arrow @click="navToAbout"/>
   </view>
 </template>
 
@@ -35,11 +13,17 @@
   import CourseModel from "@/models/CourseModel";
   import ExamModel from "@/models/ExamModel";
   import GradeModel from "@/models/GradeModel";
+  import UserInfoCard from "@/pages/settings/UserInfoCard.vue";
+  import {ref} from "vue";
+  import stdUser, {UserInfo} from "@/core/StdUser";
+  import {onShow} from "@dcloudio/uni-app";
+  import MenuItem from "@/pages/settings/MenuItem.vue";
 
-  function navToUserInfoPage() {
-    uni.navigateTo({url: "../user_info/index"});
-  }
+  const info = ref<UserInfo | null>(null);
+  onShow(async () => { info.value = await stdUser.getUserInfo() });
+
   async function clearCache() {
+    info.value = null;
     await stdClearAllStorage();
     ActivityModel.getInstance().reload();
     CourseModel.getInstance().reload();
@@ -47,6 +31,8 @@
     GradeModel.getInstance().reload();
     await uni.showToast({ title: "已清除", icon: "success"});
   }
+  async function navToAbout() { await uni.navigateTo({ url: "./about/index" }) }
+  async function navToTutorial() { await uni.navigateTo({ url: "./tutorial/index" }) }
 </script>
 
 <style scoped>
