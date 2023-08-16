@@ -20,7 +20,7 @@
   import MenuItem from "@/pages/settings/MenuItem.vue";
 
   const info = ref<UserInfo | null>(null);
-  onShow(async () => { info.value = await stdUser.getUserInfo() });
+  onShow(async () => { info.value = await stdUser.getUserInfo(false) });
 
   async function clearCache() {
     info.value = null;

@@ -13,13 +13,15 @@ export type UserInfo = {
 
 class StdUser implements StdModel {
   private _userInfo: UserInfo | null = null;
-  public async getUserInfo() {
+  public async getUserInfo(execCallback: boolean = true) {
     if (!this._userInfo) {
       try {
         this._userInfo = await stdGetStorage<UserInfo>("UserInfo")
       } catch (e) {
-        await userInfoLackCallback();
-        throw new StdUserInfoError(e);
+        if (execCallback) {
+          await userInfoLackCallback();
+          throw new StdUserInfoError(e);
+        }
       }
     }
     return this._userInfo;
