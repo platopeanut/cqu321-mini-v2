@@ -1,7 +1,7 @@
-import {stdRequest} from "@/core/network";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import type StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
+import {stdRequestHelper} from "@/core/common";
 
 type CoursesInfo = {
   currTerm: CoursesData | null
@@ -45,12 +45,16 @@ class CourseModel implements StdModel {
 
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
     const sid = (await stdUser.getUserInfo()).sid;
-    const _courses = await stdRequest<_Courses>({
-      url: "/edu_admin_center/fetchCourseTimetable",
-      data: { "code": sid, "offset": termOffset },
+    const _courses = await stdRequestHelper<_Courses>({
+      requestOptions: {
+        url: "/edu_admin_center/fetchCourseTimetable",
+        data: { "code": sid, "offset": termOffset }
+      },
       showLoading: true,
+      showError: true,
       loadingText: "更新中"
     });
+    if (_courses === null) return;
     await this.save(termOffset, {
       termName: _courses.session_name,
       startDate: _courses.start_date,

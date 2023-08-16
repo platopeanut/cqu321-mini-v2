@@ -1,7 +1,7 @@
-import {stdRequest} from "@/core/network";
 import stdUser from "../core/StdUser";
 import type StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdRequestHelper} from "@/core/common";
 
 export type ExamInfo = {
   name: string
@@ -26,12 +26,16 @@ class ExamModel implements StdModel {
   private _examInfoList: ExamInfo[] = [];
   public async update() {
     const sid = (await stdUser.getUserInfo()).sid;
-    const res: any = await stdRequest({
-      url: "/edu_admin_center/fetchExam",
-      data: { "sid": sid },
+    const res: any = await stdRequestHelper({
+      requestOptions: {
+        url: "/edu_admin_center/fetchExam",
+        data: { "sid": sid }
+      },
       showLoading: true,
+      showError: true,
       loadingText: "更新中"
     });
+    if (res === null) return;
     const exams: any[] = res.exams;
     this._examInfoList = exams.map(it => {
       return {

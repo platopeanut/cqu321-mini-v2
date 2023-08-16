@@ -28,6 +28,7 @@
   import RadioSelector from "@/pages/components/form/RadioSelector.vue";
   import {login} from "@/core/network";
   import FormButton from "@/pages/components/form/FormButton.vue";
+  import {stdShowErrorToast} from "@/core/common";
   const info = ref({
     username: "",
     password: "",
@@ -39,15 +40,16 @@
     console.log(info.value);
     return info.value.username.length > 0 && info.value.password.length > 0
   }
-  function onTapLogin() {
+  async function onTapLogin() {
     if (!checkInfo()) return;
-    uni.showLoading({title: "登陆中..."});
-    login(info.value.username, info.value.password).then(() => {
+    await uni.showLoading({title: "登陆中"});
+    try {
+      await login(info.value.username, info.value.password);
       uni.hideLoading();
-      uni.showToast({
-        title: "登陆成功",
-        icon: "success"
-      });
-    });
+      await uni.showToast({ title: "登陆成功", icon: "success" });
+    } catch (e: any) {
+      uni.hideLoading();
+      await stdShowErrorToast(e);
+    }
   }
 </script>
