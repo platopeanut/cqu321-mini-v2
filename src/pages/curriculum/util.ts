@@ -115,8 +115,8 @@ export function getCourseCells(coursesMatrix: Course[][][]) {
                         course: courses[0],
                         isOverlap: isOverlap,
                         pos: {
-                            gridColumnStart: i,
-                            gridColumnEnd: i + 1,
+                            gridColumnStart: i + 1,
+                            gridColumnEnd: i + 2,
                             gridRowStart: j + 1,
                             gridRowEnd: j + 2
                         }

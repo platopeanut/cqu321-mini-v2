@@ -10,7 +10,7 @@
     <ComplexSelector
         title="上课周数"
         :display-text="weeksText"
-        :options="range(1, 21).map(it => it.toString())"
+        :options="range(1, 31).map(it => it.toString())"
         v-model:idx-list="course.weeks"
     />
     <FormButton @click="onTapSave">新增课程</FormButton>

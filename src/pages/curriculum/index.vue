@@ -77,10 +77,10 @@
       termName.value = coursesData.termName;
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
       courses.value = coursesData.courses;
-      colorMap = makeColorMap(courses.value);
-      fixedWeekOfTerm = weekOfTerm.value;
       // 自定义课表
       courses.value.push(...await courseModel.getCustom());
+      colorMap = makeColorMap(courses.value);
+      fixedWeekOfTerm = weekOfTerm.value;
     }
   }
 

@@ -44,7 +44,9 @@ class CourseModel implements StdModel {
   }
 
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
-    const sid = (await stdUser.getUserInfo()).sid;
+    const info = await stdUser.getUserInfo();
+    if (info === null) return;
+    const sid = info.sid;
     const _courses = await stdRequestHelper<_Courses>({
       requestOptions: {
         url: "/edu_admin_center/fetchCourseTimetable",
