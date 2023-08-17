@@ -46,6 +46,7 @@
     try {
       await login(info.value.username, info.value.password);
       uni.hideLoading();
+      await uni.navigateBack({ delta: 1});
       await uni.showToast({ title: "登陆成功", icon: "success" });
     } catch (e: any) {
       uni.hideLoading();
