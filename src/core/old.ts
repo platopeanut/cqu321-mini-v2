@@ -3,6 +3,11 @@ export type StdOldResponse<T> = {
     data: T
 }
 
+export type OldRequestOptions = {
+    url: string
+    data?: any
+}
+
 export const OLD_URL = 'https://www.zhulegend.com/321CQU';
 
 export function getImgUrl(url: string) {
@@ -13,11 +18,11 @@ export function getMarkdownUrl(url: string) {
     return 'https://www.zhulegend.com' + url;
 }
 
-export async function oldRequestV1(url: string, data: any = {}) {
+export async function oldRequestV1(options: OldRequestOptions) {
     const res = await uni.request({
-        url: OLD_URL + url,
+        url: OLD_URL + options.url,
         method: "POST",
-        data: { ...data, Key: 'CQUz5321' }
+        data: { ...options.data, Key: 'CQUz5321' }
     });
     if (res.statusCode !== 200) throw res;
     const response: any = res.data;

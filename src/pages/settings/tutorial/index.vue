@@ -10,7 +10,7 @@
   import {oldRequestV1} from "@/core/old";
   const mdText = ref("");
   onShow(async () => {
-    const res = await oldRequestV1("/about/get_tutorials");
+    const res = await oldRequestV1({ url: "/about/get_tutorials" });
     mdText.value = res.Content;
   });
 </script>

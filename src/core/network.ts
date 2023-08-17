@@ -1,5 +1,6 @@
 import stdToken, {type TokenInfo} from "@/core/StdToken";
 import stdUser, {type UserInfo} from "@/core/StdUser";
+import {StdUserInfoError} from "@/core/error/StdUserInfoError";
 
 const BASE_URL = 'https://api.321cqu.com/v1';
 
@@ -83,6 +84,7 @@ async function handleToken() {
     // 如果StuInfo信息缺失则抛出异常
     // if (StdUserInfoError.test()) throw new StdUserInfoError();
     const info = await stdUser.getUserInfo();
+    if (info === null) throw new StdUserInfoError(info);
     await getToken(info.auth, info.password);
   }
   else await updateToken();
@@ -99,11 +101,13 @@ export async function login(username: string, password: string) {
 }
 
 export async function bindOpenID() {
+  const info = await stdUser.getUserInfo();
+  if (info === null) return;
   const res = await uni.login();
   await stdRequest({
     url: "/notification/bindOpenId",
     data: {
-      "uid": (await stdUser.getUserInfo()).uid,
+      "uid": info.uid,
       "code": res.code
     }
   });
