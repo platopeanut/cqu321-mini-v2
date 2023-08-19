@@ -36,6 +36,7 @@
   import Footer from "@/pages/curriculum/Footer.vue";
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
   import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
+  import {CustomCourseCloudService} from "@/models/CustomCourseModel";
 
   const courseModel = CourseModel.getInstance();
   // CONST
@@ -69,7 +70,7 @@
 
   async function initData() {
     termOffset.value = await courseModel.getCurrSelectTerm();
-    const coursesData = await courseModel.get(termOffset.value);
+    const coursesData = await courseModel.getCoursesData(termOffset.value);
     termName.value = "unknown";
     currDate.value = new Date();
     startDate.value = new Date();
@@ -78,8 +79,8 @@
       termName.value = coursesData.termName;
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
       courses.value = coursesData.courses;
-      // 自定义课表
-      courses.value.push(...await courseModel.getCustom());
+      // TODO: 自定义课表
+      // courses.value.push(...await courseModel.getCustom());
       colorMap = makeColorMap(courses.value);
       fixedWeekOfTerm = weekOfTerm.value;
     }
@@ -107,17 +108,20 @@
       itemList: [
         '切换学期',
         '自定义课表',
-        '云存储PUSH',
-        '云存储FETCH'
+        '云存储Pull',
+        '云存储Push'
       ],
       success: async result => {
-        if (result.tapIndex === 0) { onTapSwitchTerm(); }
+        if (result.tapIndex === 0) { await onTapSwitchTerm(); }
         else if (result.tapIndex === 1) { await uni.navigateTo({ url: './edit/index' }); }
+        else if (result.tapIndex === 2) {
+          await CustomCourseCloudService.pull();
+        }
       }
     });
   }
-  function onTapSwitchTerm() {
-    const termNames = courseModel.getTermNames();
+  async function onTapSwitchTerm() {
+    const termNames = await courseModel.getTermNames();
     const itemList = [
       termNames.curr || "【当前学期】点击更新",
       termNames.next || "【下一学期】点击更新"
@@ -125,12 +129,12 @@
     itemList[termOffset.value] += '🍉';
     uni.showActionSheet({
       itemList: itemList,
-      success(result: UniNamespace.ShowActionSheetRes): void {
+      success: async result => {
         termOffset.value = result.tapIndex;
-        courseModel.setCurrSelectTerm(termOffset.value);
-        initData();
+        await courseModel.setCurrSelectTerm(termOffset.value);
+        await initData();
         if ((termOffset.value === TermOffset.CurrTerm ? termNames.curr : termNames.next) === null) {
-          updateCourseInfo();
+          await updateCourseInfo();
         }
       }
     });

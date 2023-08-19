@@ -72,7 +72,7 @@
   async function initData() {
     currDate.value = new Date();
     startDate.value = new Date();
-    const coursesData = await courseModel.get(await courseModel.getCurrSelectTerm());
+    const coursesData = await courseModel.getCoursesData(await courseModel.getCurrSelectTerm());
     hasData.value = coursesData !== null;
     if (coursesData !== null) {
       startDate.value = stringToDateInChinaTime(coursesData.startDate);

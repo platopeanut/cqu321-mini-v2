@@ -57,7 +57,8 @@
 
 <script setup lang="ts">
   import {Course} from "@/models/CourseModel";
-  import {getPeriodText, getTimeText, getWeeksText} from "./util";
+  import {getPeriodText, getTimeText} from "./util";
+  import {getWeeksText} from "@/utils/course";
   defineProps<{ courses: Course[], isShow: boolean }>();
   defineEmits<{ (e: 'click'): void }>();
 </script>

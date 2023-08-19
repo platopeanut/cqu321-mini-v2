@@ -35,18 +35,21 @@
   onShow(init);
   async function init() {
     // 依次取出
-    const curr = (await courseModel.get(TermOffset.CurrTerm))?.courses || [];
-    const next = (await courseModel.get(TermOffset.NextTerm))?.courses || [];
-    const custom = await courseModel.getCustom();
+    const curr = (await courseModel.getCoursesData(TermOffset.CurrTerm))?.courses || [];
+    const next = (await courseModel.getCoursesData(TermOffset.NextTerm))?.courses || [];
+    // TODO
+    // const custom = await courseModel.getCustom();
     // 合并
     const all: { course: Course, tag: string }[] = [];
-    custom.forEach(it => all.push({ course: it, tag: "custom" }));
+    // custom.forEach(it => all.push({ course: it, tag: "custom" }));
     curr.forEach(it => all.push({ course: it, tag: "curr" }));
     next.forEach(it => all.push({ course: it, tag: "next" }));
     // 保证code唯一
     const codes = new Set<string>();
     const results: CourseCardData[] = [];
-    const priority = await courseModel.getPriority();
+    // TODO
+    // const priority = await courseModel.getPriority();
+    const priority: string[] = [];
     all.forEach(it => {
       if (codes.has(it.course.code)) return;
       codes.add(it.course.code);
@@ -68,18 +71,21 @@
     courseCardDataList.value = results;
   }
   async function onSubmit(course: Course) {
-    await courseModel.addCustom(course);
+    // TODO
+    // await courseModel.addCustom(course);
     await uni.showToast({ title: "添加成功", icon: "success" });
     await init();
     tabCur.value = 0;
   }
   async function onTapTop(courseCardData: CourseCardData) {
-    if (courseCardData.isTop) await courseModel.clearPriority(courseCardData.code);
-    else await courseModel.setPriority(courseCardData.code);
+    // TODO
+    // if (courseCardData.isTop) await courseModel.clearPriority(courseCardData.code);
+    // else await courseModel.setPriority(courseCardData.code);
     await init();
   }
   async function onTapDel(courseCardData: CourseCardData) {
-    await courseModel.delCustom(courseCardData.name);
+    // TODO
+    // await courseModel.delCustom(courseCardData.name);
     await init();
   }
 </script>

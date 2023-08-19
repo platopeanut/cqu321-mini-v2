@@ -6,8 +6,6 @@ import {stdRequestHelper} from "@/core/common";
 type CoursesInfo = {
   currTerm: CoursesData | null
   nextTerm: CoursesData | null
-  custom: Course[] | null
-  priority: string[] | null
   currSelectTerm: TermOffset | null
 };
 
@@ -20,30 +18,27 @@ class CourseModel implements StdModel {
   private static _instance: CourseModel | null = null;
   private constructor() {}
   public static getInstance() {
-    if (this._instance === null)
-      this._instance = new CourseModel();
+    if (this._instance === null) this._instance = new CourseModel();
     return this._instance;
   }
-  public reload() { this._coursesInfo = null; }
+
   private static STORAGE_KEY = "CoursesInfo";
+  private _data = new Map<TermOffset, CoursesData>();
+  private _currSelectTerm: TermOffset | null = null;
 
-  private _coursesInfo: CoursesInfo | null = null;
-
-  public async get(termOffset: TermOffset): Promise<CoursesData | null> {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    if (termOffset === TermOffset.CurrTerm)
-      return this._coursesInfo.currTerm;
-    else if (termOffset === TermOffset.NextTerm)
-      return this._coursesInfo.nextTerm;
-    else return null;
+  public reload() {
+    this._data = new Map<TermOffset, CoursesData>();
+    this._currSelectTerm = null;
   }
-  public getTermNames() {
+  public async getTermNames() {
+    // 代价很小，在内存的数据会立即返回
+    await this.getCoursesData(TermOffset.CurrTerm);
+    await this.getCoursesData(TermOffset.NextTerm);
     return {
-      curr: this._coursesInfo?.currTerm?.termName || null,
-      next: this._coursesInfo?.nextTerm?.termName || null
-    }
+      curr: this._data.get(TermOffset.CurrTerm)?.termName || null,
+      next: this._data.get(TermOffset.NextTerm)?.termName || null
+    };
   }
-
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
     const info = await stdUser.getUserInfo();
     if (info === null) return;
@@ -58,87 +53,41 @@ class CourseModel implements StdModel {
       loadingText: "更新中"
     });
     if (_courses === null) return;
-    await this.save(termOffset, {
+    await this._setCoursesData(termOffset, {
       termName: _courses.session_name,
       startDate: _courses.start_date,
       endDate: _courses.end_date,
       courses: _courses.timetables.map(it => convertCourses(it))
     });
-    this._coursesInfo = await this.load();
   }
-
-  private async load() {
-    let coursesInfo: CoursesInfo;
+  private async _setCoursesData(termOffset: TermOffset, coursesData: CoursesData) {
+    const key = termOffset === TermOffset.CurrTerm ? '-Curr' : '-Next';
+    await stdSetStorage(CourseModel.STORAGE_KEY + key, coursesData);
+    this._data.set(termOffset, coursesData);
+  }
+  public async getCoursesData(termOffset: TermOffset) {
+    if (this._data.has(termOffset)) return this._data.get(termOffset)!;
+    const key = termOffset === TermOffset.CurrTerm ? '-Curr' : '-Next';
     try {
-      coursesInfo = await stdGetStorage<CoursesInfo>(CourseModel.STORAGE_KEY);
+      const data = await stdGetStorage<CoursesData>(CourseModel.STORAGE_KEY + key);
+      this._data.set(termOffset, data);
     } catch (e) {
-      coursesInfo = {
-        currTerm: null,
-        nextTerm: null,
-        custom: null,
-        priority: null,
-        currSelectTerm: TermOffset.CurrTerm
-      };
+      this._data.delete(termOffset);
     }
-    return coursesInfo;
-  }
-
-  private async save(termOffset: TermOffset, coursesData: CoursesData) {
-    const coursesInfo = await this.load();
-    if (termOffset === TermOffset.CurrTerm)
-      coursesInfo.currTerm = coursesData;
-    else if (termOffset === TermOffset.NextTerm)
-      coursesInfo.nextTerm = coursesData;
-    await stdSetStorage(CourseModel.STORAGE_KEY, coursesInfo);
-    this._coursesInfo = await this.load();
-  }
-  public async getCustom() {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    return this._coursesInfo.custom || [];
-  }
-  public async addCustom(course: Course) {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    if (!this._coursesInfo.custom) this._coursesInfo.custom = [];
-    this._coursesInfo.custom.push(course);
-    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
-    this._coursesInfo = await this.load();
-  }
-  public async delCustom(name: string) {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    if (this._coursesInfo.custom === null) return;
-    this._coursesInfo.custom = this._coursesInfo.custom.filter(it => it.name !== name);
-    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
-    this._coursesInfo = await this.load();
-  }
-  public async getPriority() {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    return this._coursesInfo.priority || [];
-  }
-  public async setPriority(code: string) {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    if (!this._coursesInfo.priority) this._coursesInfo.priority = [];
-    // 先清理
-    this._coursesInfo.priority = this._coursesInfo.priority.filter(it => it !== code);
-    this._coursesInfo.priority.push(code);
-    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
-    this._coursesInfo = await this.load();
-  }
-  public async clearPriority(code: string) {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    if (!this._coursesInfo.priority) return;
-    this._coursesInfo.priority = this._coursesInfo.priority.filter(it => it !== code);
-    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
-    this._coursesInfo = await this.load();
+    return this._data.get(termOffset) || null;
   }
   public async getCurrSelectTerm() {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    return this._coursesInfo.currSelectTerm || TermOffset.CurrTerm;
+    if (this._currSelectTerm !== null) return this._currSelectTerm;
+    try {
+      this._currSelectTerm = await stdGetStorage<TermOffset>(CourseModel.STORAGE_KEY + '-SelectTerm');
+    } catch (e) {
+      this._currSelectTerm = TermOffset.CurrTerm;
+    }
+    return this._currSelectTerm;
   }
   public async setCurrSelectTerm(currSelectTerm: TermOffset) {
-    if (!this._coursesInfo) this._coursesInfo = await this.load();
-    this._coursesInfo.currSelectTerm = currSelectTerm;
-    await stdSetStorage(CourseModel.STORAGE_KEY, this._coursesInfo);
-    this._coursesInfo = await this.load();
+    await stdSetStorage(CourseModel.STORAGE_KEY + '-SelectTerm', currSelectTerm);
+    this._currSelectTerm = currSelectTerm;
   }
 }
 export default CourseModel;
@@ -180,7 +129,7 @@ interface _Timetable {
   stu_num: number | null
   classroom: string | null
   classroom_name: string | null
-  day_time: _DayTime | null
+  day_time: DayTime | null
 }
 interface _Course {
   name: string | null
@@ -189,16 +138,11 @@ interface _Course {
   dept: string | null
   credit: number | null
   instructor: string | null
-  session: _Session | null
-}
-interface _Session {
-  id: number | null
-  year: number
-  is_autumn: boolean
-}
-interface _DayTime {
-  weekday: number
-  period: { start: number, end: number }
+  session: {
+    id: number | null
+    year: number
+    is_autumn: boolean
+  } | null
 }
 
 function convertCourses(timetable: _Timetable): Course {

@@ -26,7 +26,7 @@
   import NumberInput from "@/pages/components/form/NumberInput.vue";
   import ComplexSelector from "@/pages/components/form/ComplexSelector.vue";
   import {range} from "@/utils/util";
-  import {getWeeksText} from "@/pages/curriculum/util";
+  import {getWeeksText} from "@/utils/course";
   const props = defineProps<{ oldCourse?: Course }>();
   const emit = defineEmits<{ (e: 'submit', course: Course): void }>();
   const course = ref<Course>(props.oldCourse !== undefined ? props.oldCourse : {
