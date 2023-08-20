@@ -1,11 +1,7 @@
 <template>
   <Form>
     <TextInput title="课程名称" v-model:value="course.name" is-required :check="isCheck"/>
-    <TextInput title="课程编号" v-model:value="course.code" is-required :check="isCheck"/>
-    <TextInput title="教学班号" v-model:value="course.courseNum" is-required :check="isCheck"/>
-    <TextInput title="上课教室" v-model:value="course.classroom"/>
-    <TextInput title="任课教师" v-model:value="course.instructor"/>
-    <NumberInput title="课程学分" v-model:value="course.credit"/>
+    <TextInput title="课程备注" v-model:value="course.content"/>
     <DayTimeInput v-model:day-time="course.dayTime"/>
     <ComplexSelector
         title="上课周数"
@@ -18,38 +14,40 @@
 </template>
 <script setup lang="ts">
   import Form from "@/pages/components/form/Form.vue";
-  import type {Course} from "@/models/CourseModel";
-  import {computed, ref} from "vue";
+  import {computed, onMounted, ref} from "vue";
   import TextInput from "@/pages/components/form/TextInput.vue";
   import FormButton from "@/pages/components/form/FormButton.vue";
   import DayTimeInput from "@/pages/curriculum/edit/DayTimeInput.vue";
-  import NumberInput from "@/pages/components/form/NumberInput.vue";
   import ComplexSelector from "@/pages/components/form/ComplexSelector.vue";
   import {range} from "@/utils/util";
   import {getWeeksText} from "@/utils/course";
-  const props = defineProps<{ oldCourse?: Course }>();
-  const emit = defineEmits<{ (e: 'submit', course: Course): void }>();
-  const course = ref<Course>(props.oldCourse !== undefined ? props.oldCourse : {
-    classroom: "",
-    code: "",
-    courseNum: "",
-    credit: 0,
-    dayTime: {period: {end: 0, start: 0}, weekday: 0},
-    instructor: "",
+  import type {CustomCourse} from "@/models/CustomCourseModel";
+  const props = defineProps<{ oldCustomCourse?: CustomCourse }>();
+  const emit = defineEmits<{ (e: 'submit', customCourse: CustomCourse): void }>();
+  const course = ref<CustomCourse>({
     name: "",
+    code: "",
+    content: "",
+    dayTime: { period: { end: 0, start: 0 }, weekday: 0 },
     weeks: []
   });
-  const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
   const isCheck = ref(false);
+  const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
+  onMounted(() => {
+    if (props.oldCustomCourse !== undefined) {
+      course.value = {... props.oldCustomCourse};
+      course.value.weeks = [...props.oldCustomCourse.weeks].map(it => it - 1);
+    }
+  });
   function checkPass() {
     isCheck.value = true;
     const c = course.value;
-    return c.name.length > 0
-        && c.code.length > 0
-        && c.courseNum.length > 0;
+    return c.name.length > 0;
   }
   function onTapSave() {
+    course.value.code = course.value.name;
     if (!checkPass()) return;
+    course.value.weeks = course.value.weeks.map(it => it + 1);
     emit('submit', course.value);
   }
 </script>

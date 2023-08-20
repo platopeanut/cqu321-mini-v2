@@ -42,11 +42,11 @@
             </view>
             <view class="flex justify-between margin-top">
               <view class="text-grey">上课时段</view>
-              <view>{{getPeriodText(course)}}</view>
+              <view>{{getPeriodText(course.dayTime)}}</view>
             </view>
             <view class="flex justify-between margin-top">
               <view class="text-grey">上课时间</view>
-              <view>{{getTimeText(course)}}</view>
+              <view>{{getTimeText(course.dayTime)}}</view>
             </view>
           </view>
         </swiper-item>
@@ -57,8 +57,7 @@
 
 <script setup lang="ts">
   import {Course} from "@/models/CourseModel";
-  import {getPeriodText, getTimeText} from "./util";
-  import {getWeeksText} from "@/utils/course";
+  import {getPeriodText, getTimeText, getWeeksText} from "@/utils/course";
   defineProps<{ courses: Course[], isShow: boolean }>();
   defineEmits<{ (e: 'click'): void }>();
 </script>

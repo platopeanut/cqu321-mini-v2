@@ -1,3 +1,6 @@
+import {TIME_TABLE} from "@/pages/curriculum/util";
+import type {DayTime} from "@/models/CourseModel";
+
 /**
  * 将weeks数组转为weeks字符串
  * @param {number[]} weeks
@@ -31,17 +34,37 @@ export function getWeeksText(weeks: number[]) {
  * @return {number[]}
  */
 export function parseWeeksText(weeksText: string) {
-    const periods = weeksText.split(',').map(it => it.trim());
+    // 去除所有空格
+    weeksText = weeksText.replace(/\s+/g, '');
+    const periods = weeksText.split(',');
     const weeks = new Set<number>();
     for (const period of periods) {
         const tmp = period.split('-');
+        if (tmp.length !== 1 && tmp.length !== 2) continue;
+        const start = parseInt(tmp[0]);
+        if (isNaN(start)) continue;
         if (tmp.length === 1) {
-            weeks.add(parseInt(tmp[0]));
+            weeks.add(start);
             continue;
         }
-        for (let i = parseInt(tmp[0]); i <= parseInt(tmp[1]); i++) {
+        const end = parseInt(tmp[1]);
+        if (isNaN(end)) continue;
+        for (let i = start; i <= end; i++) {
             weeks.add(i);
         }
     }
     return Array.from(weeks);
+}
+
+export function getPeriodText(dayTime: DayTime) {
+    const week = '一二三四五六日'.split('')[dayTime.weekday]
+    return `周${week} ${dayTime.period.start}-${dayTime.period.end}节`;
+}
+
+export function getTimeText(dayTime: DayTime) {
+    const time1 = TIME_TABLE[dayTime.period.start - 1];
+    const time2 = TIME_TABLE[dayTime.period.end - 1];
+    const start = time1.split('~')[0];
+    const end = time2.split('~')[1];
+    return start + ' ~ ' + end;
 }

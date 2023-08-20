@@ -32,7 +32,7 @@
           </view>
           <view class="flex justify-between">
             <view class="text-lg text-grey">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
-            <view class="text-lg text-grey">{{ getTimeText(course) }}</view>
+            <view class="text-lg text-grey">{{ getTimeText(course.dayTime) }}</view>
           </view>
         </view>
       </swiper-item>
@@ -46,7 +46,8 @@
   import {calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
   import {onShow} from "@dcloudio/uni-app";
   import {formatTextOverflow} from "@/utils/util";
-  import {calcCurrPeriod, getTimeText} from "./util";
+  import {calcCurrPeriod} from "./util";
+  import {getTimeText} from "@/utils/course";
 
   const props = defineProps<{ curriculumPageUrl: string }>();
 

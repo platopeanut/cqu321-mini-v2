@@ -25,7 +25,9 @@ class ExamModel implements StdModel {
   private static STORAGE_KEY = "ExamsInfo";
   private _examInfoList: ExamInfo[] = [];
   public async update() {
-    const sid = (await stdUser.getUserInfo()).sid;
+    const info = await stdUser.getUserInfo();
+    if (info === null) return;
+    const sid = info.sid;
     const res: any = await stdRequestHelper({
       requestOptions: {
         url: "/edu_admin_center/fetchExam",

@@ -18,6 +18,8 @@
   import stdUser, {UserInfo} from "@/core/StdUser";
   import {onShow} from "@dcloudio/uni-app";
   import MenuItem from "@/pages/settings/MenuItem.vue";
+  import CustomCourseModel from "@/models/CustomCourseModel";
+  import CoursePriorityModel from "@/models/CoursePriorityModel";
 
   const info = ref<UserInfo | null>(null);
   onShow(async () => { info.value = await stdUser.getUserInfo(false) });
@@ -27,6 +29,8 @@
     await stdClearAllStorage();
     ActivityModel.getInstance().reload();
     CourseModel.getInstance().reload();
+    CustomCourseModel.getInstance().reload();
+    CoursePriorityModel.getInstance().reload();
     ExamModel.getInstance().reload();
     GradeModel.getInstance().reload();
     await uni.showToast({ title: "已清除", icon: "success"});

@@ -36,7 +36,6 @@
   import Footer from "@/pages/curriculum/Footer.vue";
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
   import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
-  import {CustomCourseCloudService} from "@/models/CustomCourseModel";
 
   const courseModel = CourseModel.getInstance();
   // CONST
@@ -107,16 +106,11 @@
     uni.showActionSheet({
       itemList: [
         '切换学期',
-        '自定义课表',
-        '云存储Pull',
-        '云存储Push'
+        '自定义课表'
       ],
       success: async result => {
         if (result.tapIndex === 0) { await onTapSwitchTerm(); }
         else if (result.tapIndex === 1) { await uni.navigateTo({ url: './edit/index' }); }
-        else if (result.tapIndex === 2) {
-          await CustomCourseCloudService.pull();
-        }
       }
     });
   }

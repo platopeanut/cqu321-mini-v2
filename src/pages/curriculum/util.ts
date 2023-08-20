@@ -40,7 +40,7 @@ const COLORS = [
     '#fecb62',
 ];
 
-const TIME_TABLE = [
+export const TIME_TABLE = [
     '08:30~09:15',
     '09:25~10:10',
     '10:30~11:15',
@@ -149,19 +149,6 @@ export function getCourseCells(coursesMatrix: Course[][][]) {
         }
     }
     return courseCells;
-}
-
-export function getPeriodText(course: Course) {
-    const week = '一二三四五六日'.split('')[course.dayTime.weekday]
-    return `周${week} ${course.dayTime.period.start}-${course.dayTime.period.end}节`;
-}
-
-export function getTimeText(course: Course) {
-    const time1 = TIME_TABLE[course.dayTime.period.start - 1];
-    const time2 = TIME_TABLE[course.dayTime.period.end - 1];
-    const start = time1.split('~')[0];
-    const end = time2.split('~')[1];
-    return start + ' ~ ' + end;
 }
 
 export function calcMinutes(hour: number, minute: number) {
