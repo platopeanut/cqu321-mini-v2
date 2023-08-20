@@ -1,7 +1,7 @@
 import {stdRequest} from "@/core/network";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import {tryParseNumber} from "@/utils/util";
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
 
 export type ScoreItem = {
@@ -44,17 +44,17 @@ export enum GpaType {
     FIVE    // 五分制
 }
 
-class GradeModel implements StdModel {
+class GradeModel extends StdModel {
     private static STORAGE_KEY = "ScoreItems";
     private static _instance: GradeModel | null = null;
     private _gradeInfo: GradeInfo | null = null;
-    private constructor() {}
+    private constructor() { super(); }
     public static getInstance() {
         if (this._instance === null)
             this._instance = new GradeModel();
         return this._instance;
     }
-    public reload() { this._gradeInfo = null; }
+    public clear() { this._gradeInfo = null; }
     public async get() {
         if (this._gradeInfo === null) {
             this._gradeInfo = await this.load();
@@ -63,7 +63,9 @@ class GradeModel implements StdModel {
     }
 
     public async update() {
-        const sid = (await stdUser.getUserInfo()).sid;
+        const info = await stdUser.getUserInfo();
+        if (info === null) return;
+        const sid = info.sid;
         const [scoresData, gpaData] = await Promise.all([
             stdRequest<{scores: _Score[]}>({
                 url: "/edu_admin_center/fetchScore",

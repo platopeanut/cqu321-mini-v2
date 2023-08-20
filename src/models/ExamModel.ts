@@ -1,5 +1,5 @@
 import stdUser from "../core/StdUser";
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import {stdRequestHelper} from "@/core/common";
 
@@ -13,15 +13,15 @@ export type ExamInfo = {
   seatNum: string
 }
 
-class ExamModel implements StdModel {
+class ExamModel extends StdModel {
   private static _instance: ExamModel | null = null;
-  private constructor() {}
+  private constructor() { super(); }
   public static getInstance() {
     if (this._instance === null)
       this._instance = new ExamModel();
     return this._instance;
   }
-  public reload() { this._examInfoList = []; }
+  public clear() { this._examInfoList = []; }
   private static STORAGE_KEY = "ExamsInfo";
   private _examInfoList: ExamInfo[] = [];
   public async update() {

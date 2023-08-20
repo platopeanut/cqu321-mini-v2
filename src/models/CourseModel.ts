@@ -1,5 +1,5 @@
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
 import {stdRequestHelper} from "@/core/common";
 
@@ -14,9 +14,9 @@ export enum TermOffset {
   NextTerm
 }
 
-class CourseModel implements StdModel {
+class CourseModel extends StdModel {
   private static _instance: CourseModel | null = null;
-  private constructor() {}
+  private constructor() { super(); }
   public static getInstance() {
     if (this._instance === null) this._instance = new CourseModel();
     return this._instance;
@@ -26,7 +26,7 @@ class CourseModel implements StdModel {
   private _data = new Map<TermOffset, CoursesData>();
   private _currSelectTerm: TermOffset | null = null;
 
-  public reload() {
+  public clear() {
     this._data = new Map<TermOffset, CoursesData>();
     this._currSelectTerm = null;
   }

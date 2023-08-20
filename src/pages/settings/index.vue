@@ -9,17 +9,12 @@
 
 <script setup lang="ts">
   import {stdClearAllStorage} from "@/core/storage";
-  import ActivityModel from "@/models/ActivityModel";
-  import CourseModel from "@/models/CourseModel";
-  import ExamModel from "@/models/ExamModel";
-  import GradeModel from "@/models/GradeModel";
   import UserInfoCard from "@/pages/settings/UserInfoCard.vue";
   import {ref} from "vue";
   import stdUser, {UserInfo} from "@/core/StdUser";
   import {onShow} from "@dcloudio/uni-app";
   import MenuItem from "@/pages/settings/MenuItem.vue";
-  import CustomCourseModel from "@/models/CustomCourseModel";
-  import CoursePriorityModel from "@/models/CoursePriorityModel";
+  import StdModel from "@/core/StdModel";
 
   const info = ref<UserInfo | null>(null);
   onShow(async () => { info.value = await stdUser.getUserInfo(false) });
@@ -27,12 +22,7 @@
   async function clearCache() {
     info.value = null;
     await stdClearAllStorage();
-    ActivityModel.getInstance().reload();
-    CourseModel.getInstance().reload();
-    CustomCourseModel.getInstance().reload();
-    CoursePriorityModel.getInstance().reload();
-    ExamModel.getInstance().reload();
-    GradeModel.getInstance().reload();
+    StdModel.clearAll();
     await uni.showToast({ title: "已清除", icon: "success"});
   }
   async function navToAbout() { await uni.navigateTo({ url: "./about/index" }) }

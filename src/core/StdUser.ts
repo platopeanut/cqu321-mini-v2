@@ -1,4 +1,4 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import {StdUserInfoError} from "@/core/error/StdUserInfoError";
 import {userInfoLackCallback} from "@/utils/callback";
@@ -11,7 +11,7 @@ export type UserInfo = {
   name: string      // 姓名
 }
 
-class StdUser implements StdModel {
+class StdUser extends StdModel {
   private _userInfo: UserInfo | null = null;
   public async getUserInfo(execCallback: boolean = true) {
     if (!this._userInfo) {

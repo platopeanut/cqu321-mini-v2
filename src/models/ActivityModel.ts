@@ -1,4 +1,4 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import type {StdOldResponse} from "@/core/old";
 import {stringToDateInChinaTime} from "@/utils/datetime";
 import {downloadAndSaveFile, stdGetStorage, stdSetStorage} from "@/core/storage";
@@ -16,17 +16,17 @@ export type ActivityItem = {
     jumpType: string
 }
 
-class ActivityModel implements StdModel {
+class ActivityModel extends StdModel {
     private static STORAGE_KEY = "ActivityInfo";
     private static _instance: ActivityModel | null = null;
     private _activityInfo: ActivityInfo | null = null;
-    private constructor() {}
+    private constructor() { super(); }
     public static getInstance() {
         if (this._instance === null)
             this._instance = new ActivityModel();
         return this._instance;
     }
-    public reload(): void { this._activityInfo = null; }
+    public clear(): void { this._activityInfo = null; }
     private async _update() {
         const res = await uni.request({
             url: 'https://www.zhulegend.com/321CQU/homepage',

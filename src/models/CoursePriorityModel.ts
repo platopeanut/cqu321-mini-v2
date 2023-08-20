@@ -1,9 +1,9 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 
-class CoursePriorityModel implements StdModel {
+class CoursePriorityModel extends StdModel {
     private static _instance: CoursePriorityModel | null = null;
-    private constructor() {}
+    private constructor() { super(); }
     public static getInstance() {
         if (this._instance === null) this._instance = new CoursePriorityModel();
         return this._instance;
@@ -11,7 +11,7 @@ class CoursePriorityModel implements StdModel {
 
     private static STORAGE_KEY = "CoursePriority";
     private _priorityList: string[] | null = null;
-    public reload() { this._priorityList = null; }
+    public clear() { this._priorityList = null; }
     public async load() {
         if (this._priorityList !== null) return;
         try {

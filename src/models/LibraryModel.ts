@@ -1,7 +1,7 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdRequestHelper} from "@/core/common";
 
-class LibraryModel implements StdModel {
+class LibraryModel extends StdModel {
 
     public async update() {
         const res = await Promise.all([

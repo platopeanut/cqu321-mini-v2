@@ -1,4 +1,4 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdRequest} from "@/core/network";
 
 export enum SearchType {
@@ -31,7 +31,7 @@ export type Detail = {
     }[]
 }
 
-class CourseInfoModel implements StdModel {
+class CourseInfoModel extends StdModel {
     static async query(searchType: SearchType, value: string) {
         const data = searchType === SearchType.CourseName ? { "course_name": value } : { "teacher_name": value };
         const res = await stdRequest<{ courses: _CourseInfo[] }>({

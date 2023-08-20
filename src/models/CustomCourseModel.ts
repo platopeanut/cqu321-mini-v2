@@ -1,4 +1,4 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {oldRequestV1} from "@/core/old";
 import type {DayTime} from "@/models/CourseModel";
 import {getWeeksText, parseWeeksText} from "@/utils/course";
@@ -31,16 +31,16 @@ class CustomCourseCloudService {
     }
 }
 
-class CustomCourseModel implements StdModel {
+class CustomCourseModel extends StdModel {
     private static _instance: CustomCourseModel | null = null;
-    private constructor() {}
+    private constructor() { super(); }
     public static getInstance() {
         if (this._instance === null) this._instance = new CustomCourseModel();
         return this._instance;
     }
     private static STORAGE_KEY = "CustomCourse";
     private _courses: CustomCourse[] = [];
-    public reload() { this._courses = []; }
+    public clear() { this._courses = []; }
     public async get() {
         if (this._courses.length > 0) return this._courses;
         try {

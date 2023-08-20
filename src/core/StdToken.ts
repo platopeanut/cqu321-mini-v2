@@ -1,4 +1,4 @@
-import type StdModel from "@/core/StdModel";
+import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import {StdRefreshTokenError} from "@/core/error/StdRefreshTokenError";
 import {userInfoLackCallback} from "@/utils/callback";
@@ -13,7 +13,7 @@ export type RefreshTokenInfo = {
   refreshTokenExpireTime: number
 }
 
-class StdToken implements StdModel {
+class StdToken extends StdModel {
   private _tokenInfo: TokenInfo = {token: "", tokenExpireTime: -1};
   public get tokenInfo() { return this._tokenInfo; }
   public set tokenInfo(info: TokenInfo) {
