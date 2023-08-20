@@ -6,6 +6,12 @@
         <button @click="onTapPull" class="btn cu-btn bg-blue cuIcon-pulldown"></button>
         <button @click="onTapPush" class="btn cu-btn bg-green cuIcon-pullup"></button>
       </view>
+      <view v-if="customCourses.length === 0">
+        <Empty icon-type="warning" message="暂无自定义课程"/>
+        <view class="text-center bg-white padding-bottom">
+          <button class="cu-btn bg-blue round" @click="tabCur = 2">去创建</button>
+        </view>
+      </view>
       <CustomCourseCard
           v-for="(course, index) in customCourses"
           :key="index"
@@ -28,6 +34,7 @@
   import CustomCourseModel from "@/models/CustomCourseModel";
   import CustomCourseCard from "@/pages/curriculum/edit/CustomCourseCard.vue";
   import PriorityPage from "@/pages/curriculum/edit/PriorityPage.vue";
+  import Empty from "@/pages/components/Empty.vue";
 
   const customCourseModel = CustomCourseModel.getInstance();
   const tabCur = ref(0);
