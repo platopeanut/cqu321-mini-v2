@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
   import Form from "@/pages/components/form/Form.vue";
-  import {computed, onMounted, ref} from "vue";
+  import {computed, ref} from "vue";
   import TextInput from "@/pages/components/form/TextInput.vue";
   import FormButton from "@/pages/components/form/FormButton.vue";
   import DayTimeInput from "@/pages/curriculum/edit/DayTimeInput.vue";
@@ -25,20 +25,20 @@
   const props = defineProps<{ oldCustomCourse?: CustomCourse }>();
   const emit = defineEmits<{ (e: 'submit', customCourse: CustomCourse): void }>();
   const course = ref<CustomCourse>({
-    name: "",
-    code: "",
-    content: "",
-    dayTime: { period: { end: 0, start: 0 }, weekday: 0 },
-    weeks: []
+    name: props.oldCustomCourse?.name || "",
+    code: props.oldCustomCourse?.code || "",
+    content: props.oldCustomCourse?.content || "",
+    dayTime: {
+      weekday: props.oldCustomCourse?.dayTime.weekday || 0,
+      period: {
+        start: props.oldCustomCourse?.dayTime.period.start || 0,
+        end: props.oldCustomCourse?.dayTime.period.end || 0
+      }
+    },
+    weeks: [...(props.oldCustomCourse?.weeks || []).map(it => it - 1)]
   });
   const isCheck = ref(false);
   const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
-  onMounted(() => {
-    if (props.oldCustomCourse !== undefined) {
-      course.value = {... props.oldCustomCourse};
-      course.value.weeks = [...props.oldCustomCourse.weeks].map(it => it - 1);
-    }
-  });
   function checkPass() {
     isCheck.value = true;
     const c = course.value;
