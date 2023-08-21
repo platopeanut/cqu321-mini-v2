@@ -1,7 +1,7 @@
 <template>
   <Form>
     <TextInput title="课程名称" v-model:value="course.name" is-required :check="isCheck"/>
-    <TextInput title="课程备注" v-model:value="course.content"/>
+    <TextInput title="上课教室" v-model:value="course.content"/>
     <DayTimeInput v-model:day-time="course.dayTime"/>
     <ComplexSelector
         title="上课周数"

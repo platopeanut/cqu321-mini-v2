@@ -28,7 +28,7 @@
               <view class="name-left"></view>
               <view class="course-name">{{ formatTextOverflow(course.name, 10) }}</view>
             </view>
-            <view class="classroom">{{ formatTextOverflow(course.classroom, 5) }}</view>
+            <view class="classroom">{{ formatTextOverflow('classroom' in course ? course['classroom'] : course['content'], 5) }}</view>
           </view>
           <view class="flex justify-between">
             <view class="text-lg text-grey">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
@@ -41,20 +41,22 @@
 </template>
 
 <script setup lang="ts">
-  import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
+  import CourseModel, {TermOffset} from "@/models/CourseModel";
   import {computed, ref} from "vue";
   import {calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
   import {onShow} from "@dcloudio/uni-app";
   import {formatTextOverflow} from "@/utils/util";
-  import {calcCurrPeriod} from "./util";
+  import {calcCurrPeriod, UniCourse} from "./util";
   import {getTimeText} from "@/utils/course";
+  import CustomCourseModel from "@/models/CustomCourseModel";
 
   const props = defineProps<{ curriculumPageUrl: string }>();
 
   const courseModel = CourseModel.getInstance();
+  const customCourseModel = CustomCourseModel.getInstance();
   const currDate = ref(new Date());
   const startDate = ref<Date>(new Date());
-  const courses = ref<Course[]>([]);
+  const courses = ref<UniCourse[]>([]);
   const hasData = ref(false);
 
   const dayOfWeekText = computed(() => '一二三四五六日'.split('')[calcDayOfWeek(currDate.value)]);
@@ -77,7 +79,7 @@
     hasData.value = coursesData !== null;
     if (coursesData !== null) {
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
-      courses.value = coursesData.courses
+      courses.value = [...await customCourseModel.get(), ...coursesData.courses]
           // 过滤掉非当前周和非当天
           .filter(it => it.weeks.includes(weekOfTerm.value) && it.dayTime.weekday === calcDayOfWeek(currDate.value))
           // 过滤掉无效时间段

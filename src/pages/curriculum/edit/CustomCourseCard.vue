@@ -5,7 +5,7 @@
       <view>周数：{{getWeeksText(course.weeks)}}</view>
       <view>时段：{{getPeriodText(course.dayTime)}}</view>
     </view>
-    <view v-if="course.content.length > 0" class="text-grey padding-top-sm">备注：{{course.content}}</view>
+    <view v-if="course.content.length > 0" class="text-grey padding-top-sm">教室：{{course.content}}</view>
     <view class="flex text-center text-bold padding-top-sm" style="font-size: 50rpx;">
       <view @click="$emit('edit')" class="flex-sub cuIcon-edit text-blue"></view>
       <view @click="$emit('delete')" class="flex-sub cuIcon-close text-red"></view>

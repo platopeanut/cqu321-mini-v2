@@ -50,10 +50,10 @@
     ];
     else return [
       ['课程编号', course.code],
+      ['上课教室', course.content],
       ['时段', getPeriodText(course.dayTime)],
       ['时间', getTimeText(course.dayTime)],
-      ['周数', getWeeksText(course.weeks)],
-      ['备注', course.content]
+      ['周数', getWeeksText(course.weeks)]
     ];
   }
 </script>
