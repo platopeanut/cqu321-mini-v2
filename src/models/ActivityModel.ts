@@ -1,10 +1,11 @@
 import StdModel from "@/core/StdModel";
 import type {StdOldResponse} from "@/core/old";
-import {stringToDateInChinaTime} from "@/utils/datetime";
+import {calcDaysBetweenDates, formatTime, stringToDateInChinaTime} from "@/utils/datetime";
 import {downloadAndSaveFile, stdGetStorage, stdSetStorage} from "@/core/storage";
 import {getImgUrl} from "@/core/old";
 
 export type ActivityInfo = {
+    lastCheck: Date
     lastUpdate: Date
     pictures: ActivityItem[]
 }
@@ -43,6 +44,7 @@ class ActivityModel extends StdModel {
         const response = res.data as StdOldResponse<_ActivityInfo>;
         if (response.Statue !== 1) return null;
         return {
+            lastCheck: formatTime(new Date()),
             lastUpdate: response.data.LastUpdate,
             pictures: response.data.Pictures.map(it => {
                 return {
@@ -74,6 +76,7 @@ class ActivityModel extends StdModel {
                 await stdSetStorage(ActivityModel.STORAGE_KEY, rawInfo);
             }
             this._activityInfo = {
+                lastCheck: stringToDateInChinaTime(rawInfo.lastCheck),
                 lastUpdate: stringToDateInChinaTime(rawInfo.lastUpdate),
                 pictures: rawInfo.pictures
             };
@@ -81,16 +84,40 @@ class ActivityModel extends StdModel {
             this._activityInfo = null;
         }
     }
-    public async update() {
+    private async update() {
         await stdSetStorage(ActivityModel.STORAGE_KEY, await this._update());
         await this._load();
     }
     public async get() {
+        // 从内存中加载
         if (this._activityInfo === null) {
+            // 从缓存中加载
             await this._load();
-            if (this._activityInfo === null)
+            // 更新最新数据
+            if (this._activityInfo === null) {
+                console.log('[数据缺失更新]');
                 await this.update();
+                return this._activityInfo;
+            }
         }
+        // 如果超过一天了要更新
+        if (calcDaysBetweenDates(this._activityInfo.lastCheck, new Date()) >= 1) {
+            console.log('[超过一天更新]');
+            await this.update();
+            return this._activityInfo;
+        }
+        const threshold = new Date();
+        threshold.setHours(4, 0, 0, 0);
+        console.log(formatTime(threshold));
+        // 如果没有超过一天：上次检查时间小于今天04:00，当前时间大于今天04:00
+        if (this._activityInfo.lastCheck.getTime() <= threshold.getTime() &&
+            new Date().getTime() >= threshold.getTime()
+        ) {
+            console.log('[四点过后更新]');
+            await this.update();
+            return this._activityInfo;
+        }
+        console.log('[不触发更新]');
         return this._activityInfo;
     }
 }
@@ -105,6 +132,7 @@ type _ActivityInfo = {
 }
 
 type _RawActivityInfo = {
+    lastCheck: string
     lastUpdate: string
     pictures: ActivityItem[]
 }
