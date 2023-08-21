@@ -42,15 +42,22 @@
   }
   async function onTapLogin() {
     if (!checkInfo()) return;
-    await uni.showLoading({title: "登陆中"});
-    try {
-      await login(info.value.username, info.value.password);
-      uni.hideLoading();
-      await uni.navigateBack({ delta: 1});
-      await uni.showToast({ title: "登陆成功", icon: "success" });
-    } catch (e: any) {
-      uni.hideLoading();
-      await stdShowErrorToast(e);
-    }
+    uni.showModal({
+      title: "用户信息隐私说明",
+      content: "姓名、学号、统一认证账号均为本地存储，有特殊功能需要存储于服务器时会单独通知，请放心使用。详细隐私协议可见321CQU小程序隐私保护指引",
+      success: async result => {
+        if (!result.confirm) return;
+        await uni.showLoading({title: "登陆中"});
+        try {
+          await login(info.value.username, info.value.password);
+          uni.hideLoading();
+          await uni.navigateBack({ delta: 1});
+          await uni.showToast({ title: "登陆成功", icon: "success" });
+        } catch (e: any) {
+          uni.hideLoading();
+          await stdShowErrorToast(e);
+        }
+      }
+    })
   }
 </script>
