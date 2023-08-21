@@ -1,8 +1,11 @@
 import type {Course} from "@/models/CourseModel";
 import {calcDateAfterNDays, calcDayOfWeek} from "@/utils/datetime";
+import type {CustomCourse} from "@/models/CustomCourseModel";
+
+export type UniCourse = Course | CustomCourse;
 
 export type CourseCell = {
-    course: Course
+    course: UniCourse
     pos: GridItemPosStyle
     bgColor: string
     isOverlap: boolean
@@ -56,7 +59,7 @@ export const TIME_TABLE = [
     '21:45~22:30',
 ];
 
-export function makeColorMap(courses: Course[]) {
+export function makeColorMap(courses: UniCourse[]) {
     const codeSet = new Set<string>();
     // 根据课程编号区分颜色（使同一课程的教学课与实验课颜色相同）
     courses.forEach(it => codeSet.add(it.code));
@@ -81,13 +84,13 @@ export function getWeekDates(date: Date) {
     return dateList;
 }
 
-export function makeCoursesMatrix(courses: Course[]) {
-    // 初始化 7 * 13 矩阵，每个元素是一个Course[]
-    const matrix = new Array<Course[][]>();
+export function makeCoursesMatrix(courses: UniCourse[]) {
+    // 初始化 7 * 13 矩阵，每个元素是一个UniCourse[]
+    const matrix = new Array<UniCourse[][]>();
     for (let i = 0; i < 7; i++) {
-        const li: Course[][] = [];
+        const li: UniCourse[][] = [];
         for (let j = 0; j < 13; j++) {
-            li.push(new Array<Course>());
+            li.push(new Array<UniCourse>());
         }
         matrix.push(li);
     }
@@ -100,7 +103,19 @@ export function makeCoursesMatrix(courses: Course[]) {
     return matrix;
 }
 
-export function getCourseCells(coursesMatrix: Course[][][]) {
+function isSameCourse(a: UniCourse, b: UniCourse) {
+    const tyA = 'courseNum' in a ? 'course' : 'custom';
+    const tyB = 'courseNum' in b ? 'course' : 'custom';
+    if (tyA !== tyB) return false;
+    if (tyA === 'course') {
+        return (a as Course).courseNum === (b as Course).courseNum;
+    }
+    else {
+        return (a as CustomCourse).code === (b as CustomCourse).code;
+    }
+}
+
+export function getCourseCells(coursesMatrix: UniCourse[][][]) {
     const courseCells: CourseCell[] = [];
     for (let i = 0; i < 7; i++) {
         const dayCourses = coursesMatrix[i];
@@ -124,7 +139,8 @@ export function getCourseCells(coursesMatrix: Course[][][]) {
                 }
                 else {
                     // 按照教学班号区分（区分同一课程的教学课与实验课）
-                    if (courseCell.course.courseNum === courses[0].courseNum) {
+                    // if (courseCell.course.courseNum === courses[0].courseNum) {
+                    if (isSameCourse(courseCell.course, courses[0])) {
                         if (isOverlap) courseCell.isOverlap = isOverlap;
                         courseCell.pos.gridRowEnd ++;
                     }

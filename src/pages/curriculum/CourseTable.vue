@@ -18,8 +18,10 @@
             @click="$emit('onTapDetail', tableItem.course)"
         >
           <view v-if="tableItem.isOverlap" class="text-white text-bold text-right padding-top-xs padding-right-xs">...</view>
-          <view>{{tableItem.course.classroom}}</view>
-          <view class="bg-white" style="height: 1rpx;"></view>
+          <view v-if="'classroom' in tableItem.course">
+            <view>{{tableItem.course.classroom}}</view>
+            <view class="bg-white" style="height: 1rpx;"></view>
+          </view>
           <view>{{tableItem.course.name}}</view>
         </view>
       </view>
@@ -38,18 +40,18 @@
 </template>
 
 <script setup lang="ts">
-  import type {Course} from "@/models/CourseModel";
-  import type {CourseCell} from "@/pages/curriculum/util";
+  import type {CourseCell, UniCourse} from "@/pages/curriculum/util";
   import {calcDayOfWeek} from "@/utils/datetime";
   import {computed} from "vue";
   import {calcCurrPeriod} from "@/pages/curriculum/util";
+
   const props = defineProps<{
     tableItems: CourseCell[],
     currDate: Date,
     fixedWeekOfTerm: number,
     currWeekOfTerm: number
   }>();
-  defineEmits<{ (e: 'onTapDetail', course: Course) : void }>();
+  defineEmits<{ (e: 'onTapDetail', course: UniCourse) : void }>();
   const dayOfWeek = computed(()=>{
     return calcDayOfWeek(props.currDate) + 1;
   });

@@ -22,10 +22,10 @@
 </template>
 
 <script setup lang="ts">
-  import CourseModel, {Course, TermOffset} from "@/models/CourseModel";
+  import CourseModel, {TermOffset} from "@/models/CourseModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
-  import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
+  import {getCourseCells, makeColorMap, makeCoursesMatrix, UniCourse} from "@/pages/curriculum/util";
   import {
     calcDateAfterNDays,
     calcDayOfWeek,
@@ -36,8 +36,10 @@
   import Footer from "@/pages/curriculum/Footer.vue";
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
   import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
+  import CustomCourseModel from "@/models/CustomCourseModel";
 
   const courseModel = CourseModel.getInstance();
+  const customCourseModel = CustomCourseModel.getInstance();
   // CONST
   let colorMap: Map<string, string>;
   let fixedWeekOfTerm: number = 0;
@@ -46,8 +48,8 @@
   const termName = ref<string>("unknown");
   const currDate = ref(new Date());
   const startDate = ref<Date>(new Date());
-  const courses = ref<Course[]>([]);
-  const activeCourses = ref<Course[]>([]);
+  const courses = ref<UniCourse[]>([]);
+  const activeCourses = ref<UniCourse[]>([]);
   const isShowDetail = ref(false);
   // COMPUTED
   const dayOfWeek = computed(() => calcDayOfWeek(currDate.value));
@@ -77,9 +79,9 @@
     if (coursesData !== null) {
       termName.value = coursesData.termName;
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
-      courses.value = coursesData.courses;
+      courses.value = [...coursesData.courses];
       // TODO: 自定义课表
-      // courses.value.push(...await courseModel.getCustom());
+      courses.value.push(...await customCourseModel.get());
       colorMap = makeColorMap(courses.value);
       fixedWeekOfTerm = weekOfTerm.value;
     }
@@ -133,9 +135,9 @@
       }
     });
   }
-  function onTapDetail(course: Course) {
+  function onTapDetail(course: UniCourse) {
     const namesSet = new Set<string>();
-    const targetCourses: Course[] = [];
+    const targetCourses: UniCourse[] = [];
     const i = course.dayTime.weekday;
     for (let j = course.dayTime.period.start; j < course.dayTime.period.end; j++) {
       for (const currCourse of coursesMatrix.value[i][j]) {
