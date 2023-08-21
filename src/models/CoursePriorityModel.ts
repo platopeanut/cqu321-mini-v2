@@ -42,11 +42,14 @@ class CoursePriorityModel extends StdModel {
      * (!!! 注意调用此函数之前一定要先调用load函数)
      * @param {string} code1
      * @param {string} code2
+     * @param {number} defaultLevel1 默认code1的优先级，越大越高
+     * @param {number} defaultLevel2 默认code2的优先级，越大越高
      * @return {number}
      */
-    public compare(code1: string, code2: string) {
+    public compare(code1: string, code2: string, defaultLevel1=0, defaultLevel2=0) {
         const idx1 = this._priorityList!.indexOf(code1);
         const idx2 = this._priorityList!.indexOf(code2);
+        if (idx1 === idx2) return defaultLevel1 - defaultLevel2;
         return idx1 - idx2;
     }
 }

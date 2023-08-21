@@ -37,6 +37,7 @@
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
   import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
   import CustomCourseModel from "@/models/CustomCourseModel";
+  import CoursePriorityModel from "@/models/CoursePriorityModel";
 
   const courseModel = CourseModel.getInstance();
   const customCourseModel = CustomCourseModel.getInstance();
@@ -70,6 +71,7 @@
   });
 
   async function initData() {
+    await CoursePriorityModel.getInstance().load();
     termOffset.value = await courseModel.getCurrSelectTerm();
     const coursesData = await courseModel.getCoursesData(termOffset.value);
     termName.value = "unknown";
@@ -137,9 +139,11 @@
   }
   function onTapDetail(course: UniCourse) {
     const namesSet = new Set<string>();
-    const targetCourses: UniCourse[] = [];
+    // 保证course第一个显示
+    namesSet.add(course.name);
+    const targetCourses: UniCourse[] = [course];
     const i = course.dayTime.weekday;
-    for (let j = course.dayTime.period.start; j < course.dayTime.period.end; j++) {
+    for (let j = course.dayTime.period.start - 1; j < course.dayTime.period.end; j++) {
       for (const currCourse of coursesMatrix.value[i][j]) {
         if (!namesSet.has(currCourse.name)) {
           targetCourses.push(currCourse);

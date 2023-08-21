@@ -6,6 +6,7 @@
   >
     <view class="cu-dialog" @tap.stop="">
       <swiper
+        v-if="isShow"
         class="square-dot"
         indicator-dots
         circular

@@ -1,6 +1,7 @@
 import type {Course} from "@/models/CourseModel";
 import {calcDateAfterNDays, calcDayOfWeek} from "@/utils/datetime";
 import type {CustomCourse} from "@/models/CustomCourseModel";
+import CoursePriorityModel from "@/models/CoursePriorityModel";
 
 export type UniCourse = Course | CustomCourse;
 
@@ -100,7 +101,23 @@ export function makeCoursesMatrix(courses: UniCourse[]) {
             matrix[it.dayTime.weekday][i].push(it);
         }
     });
+    applyPriority(matrix);
     return matrix;
+}
+
+function applyPriority(matrix: UniCourse[][][]) {
+    const priorityModel = CoursePriorityModel.getInstance();
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            if (matrix[i][j].length === 0) continue;
+            matrix[i][j].sort((a, b) => priorityModel.compare(
+                b.code,
+                a.code,
+                'courseNum' in a ? 1 : 0,
+                'courseNum' in b ? 1 : 0
+            ));
+        }
+    }
 }
 
 function isSameCourse(a: UniCourse, b: UniCourse) {
