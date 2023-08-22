@@ -60,7 +60,7 @@
       title: `是否删除：${customCourse.name}`,
       success: async result => {
         if (result.confirm) {
-          await customCourseModel.del(customCourse.code);
+          await customCourseModel.del(customCourse);
           customCourses.value = await customCourseModel.get();
           await uni.showToast({ title: "已删除", icon: "success" });
         }
@@ -69,7 +69,7 @@
   }
   async function onSubmit(customCourse: CustomCourse) {
     if (oldCustomCourse.value !== undefined) {
-      await customCourseModel.del(oldCustomCourse.value.code);
+      await customCourseModel.del(oldCustomCourse.value);
       oldCustomCourse.value = undefined;
     }
     await customCourseModel.add(customCourse);

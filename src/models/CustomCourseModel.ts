@@ -54,8 +54,17 @@ class CustomCourseModel extends StdModel {
         this._courses.push(customCourse);
         await stdSetStorage(CustomCourseModel.STORAGE_KEY, this._courses);
     }
-    public async del(code: string) {
-        this._courses = this._courses.filter(it => it.code !== code);
+    public async del(course: CustomCourse) {
+        this._courses = this._courses.filter(it => {
+            return !(
+                it.name === course.name
+                && it.code === course.code
+                && it.content === course.content
+                && it.dayTime.weekday === course.dayTime.weekday
+                && it.dayTime.period.start === course.dayTime.period.start
+                && it.dayTime.period.end === course.dayTime.period.end
+            );
+        });
         await stdSetStorage(CustomCourseModel.STORAGE_KEY, this._courses);
     }
     public async pull() {
