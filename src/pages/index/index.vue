@@ -12,9 +12,9 @@
       <view class="icons-1st padding-top">
         <Icon2nd title="常用信息" icon-name="cuIcon-evaluate_fill" @click="navToGeneralInfoPage" />
         <Icon2nd title="图书馆" icon-name="cuIcon-read" @click="navToLibraryPage"/>
-        <Icon2nd title="生活" icon-name="cuIcon-baby" />
+        <Icon2nd title="生活" icon-name="cuIcon-baby" disabled />
 <!--        <Icon2nd title="空教室" icon-name="cuIcon-location" />-->
-        <Icon2nd title="体测查询" icon-name="cuIcon-footprint" />
+        <Icon2nd title="体测查询" icon-name="cuIcon-footprint" disabled />
         <Icon2nd title="设置" icon-name="cuIcon-settings" @click="navToSettingsPage"/>
       </view>
     </view>
